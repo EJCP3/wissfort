@@ -27,11 +27,6 @@ const t = useTranslations(lang);
       </button>
     </div>
 
-    <div class="flex justify-center gap-6 pt-2 text-sm font-medium text-zinc-500">
-      <a href="#playground" class="hover:text-zinc-900 dark:text-zinc-100 transition-colors">{t('hero.playground_link')}</a>
-      <a href="#docs" class="text-zinc-900 dark:text-zinc-100 font-bold hover:underline decoration-zinc-300 underline-offset-4">{t('hero.documentation_link')}</a>
-    </div>
-  </div>
 
   <!-- Playground Buttons (Try It) positioned at the bottom of the hero -->
   <div id="playground" class="absolute bottom-12 left-0 right-0 flex flex-col items-center gap-5">
@@ -56,23 +51,32 @@ const t = useTranslations(lang);
         const type = (e.target as HTMLElement).textContent?.toLowerCase().trim();
         const i18n = (window as any).i18nToasts?.actions || {
           success: 'Event has been created',
+          success_desc: 'Sunday, December 03, 2023 at 9:00 AM',
           error_missing_fields: 'Missing required fields',
+          error_missing_fields_desc: 'Please fill in all required fields to continue.',
           warning_session: 'Your session will expire soon',
+          warning_session_desc: 'Please save your work before you are logged out.',
           info_update: 'New software update available',
+          info_update_desc: 'Version 2.0.1 is now available for download.',
           action_deleted: 'Item deleted',
+          action_deleted_desc: 'The selected item has been permanently removed.',
           action_undo: 'Undo',
+          action_undo_success: 'Action undone successfully',
           promise_loading: 'Loading data...',
           promise_success: 'Data loaded successfully!',
-          promise_error: 'Error loading data'
+          promise_success_desc: 'The information has been synced with the server.',
+          promise_error: 'Error loading data',
+          promise_error_desc: 'There was a problem trying to connect to the server.'
         };
         
         switch(type) {
-          case 'success': toast.success(i18n.success); break;
-          case 'error': toast.error(i18n.error_missing_fields); break;
-          case 'warning': toast.warning(i18n.warning_session); break;
-          case 'info': toast.info(i18n.info_update); break;
+          case 'success': toast.success(i18n.success, { description: i18n.success_desc }); break;
+          case 'error': toast.error(i18n.error_missing_fields, { description: i18n.error_missing_fields_desc }); break;
+          case 'warning': toast.warning(i18n.warning_session, { description: i18n.warning_session_desc }); break;
+          case 'info': toast.info(i18n.info_update, { description: i18n.info_update_desc }); break;
           case 'action': toast.show(i18n.action_deleted, { 
-            action: { label: i18n.action_undo, onClick: () => console.log('Undone') } 
+            description: i18n.action_deleted_desc,
+            action: { label: i18n.action_undo, onClick: () => toast.success(i18n.action_undo_success || 'Action undone successfully') } 
           }); break;
           case 'promise': 
             toast.promise(new Promise(resolve => setTimeout(resolve, 2000)), {

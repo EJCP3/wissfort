@@ -8,7 +8,7 @@
     "format_toggle_tooltip": "Change Format"
   },
   "hero": {
-    "description": "An opinionated toast component for modern apps. SVG morphing, spring physics, and a minimal API — beautiful by default.",
+    "description": "A minimalist toast component. SVG morphing, spring physics, and a clean API — beautiful by default.",
     "install_command": "pnpm install wissfort",
     "playground_link": "Playground →",
     "documentation_link": "Documentation",
@@ -42,8 +42,8 @@
   "content": {
     "introduccion": {
       "title": "Introduction",
-      "p1": "Headless and runtime-dependency-free toast notifications library. The core (wiss) is a pure TypeScript \"brain\" —state, queue, timers— that knows nothing about the DOM or any framework. The visual layer is interchangeable: by default it brings its own themes (light and dark) or you can choose to inherit the theme from your project via daisyUI or shadcn/ui to adapt to your current design.",
-      "p2": "This phase includes a single adapter, Vanilla JS, which also works for Astro."
+      "p1": "Headless and runtime-dependency-free toast notifications library. The core (wiss) is a pure TypeScript \"brain\" —state, queue, timers— that knows nothing about the DOM or any framework. The visual layer is interchangeable: by default it brings its own themes (light and dark) or you can choose to inherit the theme from your project via daisyUI or shadcn/ui to adapt to your current design."
+     
     },
     "instalacion": {
       "title": "Installation"
@@ -133,15 +133,14 @@
         "Add new animations and document them.",
         "Implement performance improvements.",
         "Add new icons for notifications.",
-        "Add new sounds for notifications.",
-        "Add new themes"
+        "Add new sounds for notifications."
       ]
     },
     "creditos": {
       "title": "Credits",
       "items": [
-        "<strong>Visual Design:</strong> The base aesthetic (with glassmorphism effects and soft borders) is inspired by the design of Sileo UI.",
-        "<strong>Notification sound:</strong> the mini notification sounds are from Cuelume."
+        "<strong>Visual Design:</strong> The base aesthetic (with glassmorphism effects and soft borders) is inspired by the design of <a href=\"https://sileo.aaryan.design/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 dark:text-blue-400 underline\">Sileo UI</a> (<a href=\"https://github.com/hiaaryan/sileo\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 dark:text-blue-400 underline\">GitHub</a>).",
+        "<strong>Notification sound:</strong> the mini notification sounds are from <a href=\"https://cuelume-site.pages.dev/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 dark:text-blue-400 underline\">Cuelume</a> (<a href=\"https://github.com/Danilaa1/cuelume\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 dark:text-blue-400 underline\">GitHub</a>)."
       ]
     }
   },
@@ -154,14 +153,22 @@
     },
     "actions": {
       "success": "Event has been created",
+      "success_desc": "Sunday, December 03, 2023 at 9:00 AM",
       "error_missing_fields": "Missing required fields",
+      "error_missing_fields_desc": "Please fill in all required fields to continue.",
       "warning_session": "Your session will expire soon",
+      "warning_session_desc": "Please save your work before you are logged out.",
       "info_update": "New software update available",
+      "info_update_desc": "Version 2.0.1 is now available for download.",
       "action_deleted": "Item deleted",
+      "action_deleted_desc": "The selected item has been permanently removed.",
       "action_undo": "Undo",
+      "action_undo_success": "Action undone successfully",
       "promise_loading": "Loading data...",
       "promise_success": "Data loaded successfully!",
+      "promise_success_desc": "The information has been synced with the server.",
       "promise_error": "Error loading data",
+      "promise_error_desc": "There was a problem trying to connect to the server.",
       "desc_title": "File saved!",
       "desc_text": "The file was saved successfully in your local folder.",
       "icon_title": "New update",
@@ -169,6 +176,11 @@
       "history_logged": "History printed to console. Open DevTools to view it.",
       "theme_dark": "Dark theme activated",
       "theme_light": "Light theme activated",
+      "theme_glass": "Glass theme activated",
+      "theme_neon": "Neon theme activated",
+      "theme_pastel": "Pastel theme activated",
+      "theme_brutal": "Brutal theme activated",
+      "theme_pop": "Pop theme activated",
       "format_classic": "Classic format activated",
       "format_island": "Island format activated",
       "limit_2": "Limit changed to 2. Spam clicks to test.",

@@ -8,7 +8,7 @@
     "format_toggle_tooltip": "Cambiar Formato"
   },
   "hero": {
-    "description": "Un componente toast opinado para apps modernas. Animaciones fluidas, físicas de resorte y una API mínima — hermoso por defecto.",
+    "description": "Un componente de toast minimalista. Animaciones fluidas, físicas de resorte y una API limpia — hermoso por defecto.",
     "install_command": "pnpm install wissfort",
     "playground_link": "Playground →",
     "documentation_link": "Documentación",
@@ -42,8 +42,8 @@
   "content": {
     "introduccion": {
       "title": "Introducción",
-      "p1": "Librería de notificaciones toast headless y sin dependencias de runtime. El núcleo (wiss) es un \"cerebro\" de TypeScript puro —estado, cola, timers— que no sabe nada del DOM ni de ningún framework. La capa visual es intercambiable: por defecto trae sus propios temas (light y dark) o puedes optar por heredar el tema de tu proyecto vía daisyUI o shadcn/ui para que se adapte a tu diseño actual.",
-      "p2": "Esta fase incluye un único adaptador, Vanilla JS, que también sirve para Astro."
+      "p1": "Librería de notificaciones toast headless y sin dependencias de runtime. El núcleo (wiss) es un \"cerebro\" de TypeScript puro —estado, cola, timers— que no sabe nada del DOM ni de ningún framework. La capa visual es intercambiable: por defecto trae sus propios temas (light y dark) o puedes optar por heredar el tema de tu proyecto vía daisyUI o shadcn/ui para que se adapte a tu diseño actual."
+     
     },
     "instalacion": {
       "title": "Instalación"
@@ -133,15 +133,14 @@
         "Añadir nuevas animaciones y que estén en la documentación.",
         "Implementar mejoras en el rendimiento.",
         "Añadir nuevos iconos para las notificaciones.",
-        "Añadir nuevos sonidos para las notificaciones.",
-        "Añadir nuevos temas"
+        "Añadir nuevos sonidos para las notificaciones."
       ]
     },
     "creditos": {
       "title": "Créditos",
       "items": [
-        "<strong>Diseño Visual:</strong> La estética base (con efectos de glassmorphism y bordes suaves) está inspirada en el diseño de Sileo UI.",
-        "<strong>Sonido de notificación:</strong> los mini sonidos de las notificaciones son de Cuelume."
+        "<strong>Diseño Visual:</strong> La estética base (con efectos de glassmorphism y bordes suaves) está inspirada en el diseño de <a href=\"https://sileo.aaryan.design/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 dark:text-blue-400 underline\">Sileo UI</a> (<a href=\"https://github.com/hiaaryan/sileo\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 dark:text-blue-400 underline\">GitHub</a>).",
+        "<strong>Sonido de notificación:</strong> los mini sonidos de las notificaciones son de <a href=\"https://cuelume-site.pages.dev/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 dark:text-blue-400 underline\">Cuelume</a> (<a href=\"https://github.com/Danilaa1/cuelume\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 dark:text-blue-400 underline\">GitHub</a>)."
       ]
     }
   },
@@ -153,15 +152,23 @@
       "lang_changed": "Idioma cambiado a {currentLang} (Próximamente)"
     },
     "actions": {
-      "success": "Event has been created",
-      "error_missing_fields": "Missing required fields",
-      "warning_session": "Your session will expire soon",
-      "info_update": "New software update available",
-      "action_deleted": "Item deleted",
-      "action_undo": "Undo",
-      "promise_loading": "Loading data...",
-      "promise_success": "Data loaded successfully!",
-      "promise_error": "Error loading data",
+      "success": "Evento creado exitosamente",
+      "success_desc": "Domingo, 03 de Diciembre, 2023 a las 9:00 AM",
+      "error_missing_fields": "Faltan campos obligatorios",
+      "error_missing_fields_desc": "Por favor completa todos los campos requeridos para continuar.",
+      "warning_session": "Tu sesión expirará pronto",
+      "warning_session_desc": "Por favor guarda tu trabajo antes de que se cierre tu sesión.",
+      "info_update": "Nueva actualización disponible",
+      "info_update_desc": "La versión 2.0.1 ya está disponible para descargar.",
+      "action_deleted": "Elemento eliminado",
+      "action_deleted_desc": "El elemento seleccionado ha sido eliminado permanentemente.",
+      "action_undo": "Deshacer",
+      "action_undo_success": "Acción deshecha correctamente",
+      "promise_loading": "Cargando datos...",
+      "promise_success": "¡Datos cargados exitosamente!",
+      "promise_success_desc": "La información se ha sincronizado con el servidor.",
+      "promise_error": "Error al cargar los datos",
+      "promise_error_desc": "Hubo un problema al intentar conectar con el servidor.",
       "desc_title": "¡Archivo guardado!",
       "desc_text": "El archivo se guardó correctamente en tu carpeta local.",
       "icon_title": "Nueva actualización",
@@ -169,6 +176,11 @@
       "history_logged": "Historial impreso en consola. Abre DevTools para verlo.",
       "theme_dark": "Tema oscuro activado",
       "theme_light": "Tema claro activado",
+      "theme_glass": "Tema glass activado",
+      "theme_neon": "Tema neon activado",
+      "theme_pastel": "Tema pastel activado",
+      "theme_brutal": "Tema brutal activado",
+      "theme_pop": "Tema pop activado",
       "format_classic": "Formato Classic activado",
       "format_island": "Formato Island activado",
       "limit_2": "Límite cambiado a 2. Spamea clics para probar.",
