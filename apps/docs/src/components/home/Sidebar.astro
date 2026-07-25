@@ -1,0 +1,128 @@
+---
+import type { Lang } from '../../i18n/utils';
+import { useTranslations } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<!-- Sticky Sidebar -->
+<aside class="w-48 shrink-0 hidden md:block">
+  <div class="sticky top-12 space-y-6">
+    <div class="flex items-center gap-2 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+      {t('sidebar.title')}
+    </div>
+    <nav class="flex flex-col gap-2.5 text-sm text-zinc-500 dark:text-zinc-400 toc-nav">
+      <a href="#introduccion" class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">
+        <span class="toc-line w-4 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-6 group-hover:bg-zinc-400"></span>
+        {t('sidebar.introduccion')}
+      </a>
+      <a href="#instalacion" class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">
+        <span class="toc-line w-4 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-6 group-hover:bg-zinc-400"></span>
+        {t('sidebar.instalacion')}
+      </a>
+      <a href="#uso-basico" class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">
+        <span class="toc-line w-4 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-6 group-hover:bg-zinc-400"></span>
+        {t('sidebar.uso_basico')}
+      </a>
+      <a href="#opciones" data-sub class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors pl-3">
+        <span class="toc-line w-2 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-4 group-hover:bg-zinc-400"></span>
+        <span class="text-[13px] opacity-80">{t('sidebar.opciones_por_toast')}</span>
+      </a>
+      <a href="#historial" data-sub class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors pl-3">
+        <span class="toc-line w-2 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-4 group-hover:bg-zinc-400"></span>
+        <span class="text-[13px] opacity-80">{t('sidebar.historial')}</span>
+      </a>
+      <a href="#configuracion" class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">
+        <span class="toc-line w-4 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-6 group-hover:bg-zinc-400"></span>
+        {t('sidebar.configuracion_global')}
+      </a>
+      <a href="#uso-astro" class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">
+        <span class="toc-line w-4 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-6 group-hover:bg-zinc-400"></span>
+        {t('sidebar.uso_astro')}
+      </a>
+      <a href="#temas" class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">
+        <span class="toc-line w-4 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-6 group-hover:bg-zinc-400"></span>
+        {t('sidebar.integracion_ui')}
+      </a>
+      <a href="#tailwind" data-sub class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors pl-3">
+        <span class="toc-line w-2 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-4 group-hover:bg-zinc-400"></span>
+        <span class="text-[13px] opacity-80">{t('sidebar.tailwind_css')}</span>
+      </a>
+      <a href="#react" data-sub class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors pl-3">
+        <span class="toc-line w-2 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-4 group-hover:bg-zinc-400"></span>
+        <span class="text-[13px] opacity-80">{t('sidebar.react')}</span>
+      </a>
+      <a href="#vue" data-sub class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors pl-3">
+        <span class="toc-line w-2 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-4 group-hover:bg-zinc-400"></span>
+        <span class="text-[13px] opacity-80">{t('sidebar.vue')}</span>
+      </a>
+      <a href="#svelte" data-sub class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors pl-3">
+        <span class="toc-line w-2 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-4 group-hover:bg-zinc-400"></span>
+        <span class="text-[13px] opacity-80">{t('sidebar.svelte')}</span>
+      </a>
+      <a href="#roadmap" class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">
+        <span class="toc-line w-4 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-6 group-hover:bg-zinc-400"></span>
+        {t('sidebar.roadmap')}
+      </a>
+      <a href="#creditos" class="toc-link group flex items-center gap-3 hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">
+        <span class="toc-line w-4 h-px bg-zinc-200 dark:bg-zinc-800 transition-all group-hover:w-6 group-hover:bg-zinc-400"></span>
+        {t('sidebar.creditos')}
+      </a>
+    </nav>
+  </div>
+</aside>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    // Intersection Observer for TOC
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const sections = Array.from(tocLinks).map(link => {
+      const id = link.getAttribute('href')?.substring(1);
+      return document.getElementById(id || '');
+    }).filter(Boolean) as HTMLElement[];
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -80% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Remove active classes
+          tocLinks.forEach(link => {
+            link.classList.remove('text-blue-600', 'font-medium', 'dark:text-blue-400');
+            link.classList.remove('opacity-100'); // for sub links
+            const line = link.querySelector('.toc-line');
+            if (line) {
+              const isSub = link.hasAttribute('data-sub');
+              line.classList.remove('w-8', 'w-5', 'bg-blue-600', 'dark:bg-blue-400');
+              line.classList.add(isSub ? 'w-2' : 'w-4', 'bg-zinc-200', 'dark:bg-zinc-800');
+            }
+          });
+          
+          // Add active class to current
+          const activeId = entry.target.getAttribute('id');
+          const activeLink = document.querySelector(`.toc-link[href="#${activeId}"]`);
+          if (activeLink) {
+            activeLink.classList.add('text-blue-600', 'font-medium', 'dark:text-blue-400', 'opacity-100');
+            const line = activeLink.querySelector('.toc-line');
+            if (line) {
+              const isSub = activeLink.hasAttribute('data-sub');
+              line.classList.remove('w-4', 'w-2', 'bg-zinc-200', 'dark:bg-zinc-800');
+              line.classList.add(isSub ? 'w-5' : 'w-8', 'bg-blue-600', 'dark:bg-blue-400');
+            }
+          }
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(section => observer.observe(section));
+  });
+</script>

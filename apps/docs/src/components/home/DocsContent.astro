@@ -1,0 +1,347 @@
+---
+import CodeBlock from '../CodeBlock.astro';
+import PreviewBlock from '../PreviewBlock.astro';
+import type { Lang } from '../../i18n/utils';
+import { useTranslations, getTranslations } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const interactiveToasts = getTranslations(lang, 'interactive_toasts');
+---
+<article class="flex-1 max-w-2xl prose prose-zinc prose-a:text-zinc-900 dark:text-zinc-100 pb-32">
+  <h2 id="introduccion" class="text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">{t('content.introduccion.title')}</h2>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
+    {t('content.introduccion.p1')}
+  </p>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
+    {t('content.introduccion.p2')}
+  </p>
+
+  <h2 id="instalacion" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.instalacion.title')}</h2>
+  <CodeBlock lang="bash" code="pnpm add wissfort" />
+  
+  <h2 id="sonido-e-interacciones" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.sonido_interacciones.title')}</h2>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6" set:html={t('content.sonido_interacciones.p1_html')} />
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">{t('content.sonido_interacciones.p2')}</p>
+  <CodeBlock lang="js" code={`import { toaster } from 'wissfort';\n\ntoaster({ sound: false });`} />
+
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6 mt-6" set:html={t('content.sonido_interacciones.p3_html')} />
+  <CodeBlock lang="js" code={`toast.info('Notificación con sonido especial', { sound: 'sparkle' });`} />
+
+  <div class="mt-8 mb-6 p-6 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-white dark:bg-[#121214]">
+    <h3 class="font-bold text-zinc-900 dark:text-zinc-100 mb-2">{t('content.sonido_interacciones.default_sounds_title')}</h3>
+    <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-4" set:html={t('content.sonido_interacciones.default_sounds_desc_html')} />
+    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm text-zinc-600 dark:text-zinc-400">
+      <li><strong>success:</strong> <code>success</code></li>
+      <li><strong>error:</strong> <code>press</code></li>
+      <li><strong>warning:</strong> <code>chime</code></li>
+      <li><strong>info:</strong> <code>droplet</code></li>
+      <li><strong>loading:</strong> <code>bloom</code></li>
+    </ul>
+  </div>
+
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.sonido_interacciones.catalogo_title')}</h3>
+  <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-6">{t('content.sonido_interacciones.catalogo_desc')}</p>
+
+  <PreviewBlock id="sound-catalog" lang="js" code={`import { toast } from 'wissfort';\n\n// Prueba cualquier sonido personalizado\ntoast.info('Chime sonando', { sound: 'chime' });\ntoast.info('Mensaje discreto', { sound: 'whisper' });\ntoast.info('Error mecánico', { sound: 'toggle' });`}>
+    <div slot="preview" class="flex flex-wrap justify-center gap-2 px-4 max-w-2xl mx-auto">
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="chime">chime</button>
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="sparkle">sparkle</button>
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="droplet">droplet</button>
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="bloom">bloom</button>
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="whisper">whisper</button>
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="tick">tick</button>
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="press">press</button>
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="release">release</button>
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="toggle">toggle</button>
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="success">success</button>
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="error">error</button>
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="page">page</button>
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="loading">loading</button>
+      <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="ready">ready</button>
+    </div>
+  </PreviewBlock>
+
+  <h2 id="uso-basico" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.uso_basico.title')}</h2>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6" set:html={t('content.uso_basico.desc_html')} />
+  
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.uso_basico.simples_title')}</h3>
+  <PreviewBlock id="toast-simple" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.success('Usuario creado');\ntoast.error('Algo salió mal');\ntoast.warning('Revisa este campo');\ntoast.info('Nueva actualización disponible');`}>
+    <div slot="preview" class="flex flex-wrap justify-center gap-3">
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Success</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Error</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Warning</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Info</button>
+    </div>
+  </PreviewBlock>
+  <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-4 text-center">{t('content.uso_basico.simples_tip')}</p>
+
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.uso_basico.action_title')}</h3>
+  <PreviewBlock id="toast-action" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.show('Elemento eliminado', { \n  action: { \n    label: 'Deshacer', \n    onClick: () => console.log('Acción deshecha') \n  } \n});`}>
+    <div slot="preview" class="flex justify-center">
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Action</button>
+    </div>
+  </PreviewBlock>
+
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.uso_basico.promise_title')}</h3>
+  <PreviewBlock id="toast-promise" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.promise(\n  fetch('/api/users'),\n  {\n    loading: 'Cargando usuarios...',\n    success: 'Usuarios cargados correctamente',\n    error: 'Error al cargar usuarios',\n  }\n);`}>
+    <div slot="preview" class="flex justify-center">
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Promise</button>
+    </div>
+  </PreviewBlock>
+
+  <h2 id="opciones" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.opciones.title')}</h2>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">{t('content.opciones.desc')}</p>
+
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.opciones.desc_title')}</h3>
+  <PreviewBlock id="toast-description" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.success('¡Archivo guardado!', {\n  description: 'El archivo se guardó correctamente en tu carpeta local.'\n});`}>
+    <div slot="preview" class="flex justify-center">
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Description</button>
+    </div>
+  </PreviewBlock>
+
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.opciones.icon_title')}</h3>
+  <PreviewBlock id="toast-icon" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.info('Nueva actualización', {\n  icon: '🚀' // Puedes pasar un string, HTML o SVG\n});`}>
+    <div slot="preview" class="flex flex-col items-center gap-4 w-full">
+      <button class="run-code-btn px-6 py-2.5 bg-black text-white dark:bg-white dark:text-black hover:scale-105 rounded-xl text-sm font-medium transition-all shadow-lg">{t('content.opciones.icon_run_code')}</button>
+      <div class="text-sm text-zinc-500 flex flex-col gap-2 items-center justify-center">
+         <span>{t('content.opciones.icon_choose')}</span>
+         <div class="flex gap-2">
+           <button class="icon-option p-2 bg-zinc-100 dark:bg-zinc-800/50 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors text-xl" data-icon="💡">💡</button>
+           <button class="icon-option p-2 bg-zinc-100 dark:bg-zinc-800/50 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors text-xl" data-icon="🔥">🔥</button>
+           <button class="icon-option p-2 bg-zinc-100 dark:bg-zinc-800/50 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors text-xl" data-icon="✨">✨</button>
+           <button class="icon-option p-2 bg-zinc-100 dark:bg-zinc-800/50 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors text-zinc-700 dark:text-zinc-300" data-icon='<svg width="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>'>
+             <svg width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+           </button>
+           <button class="icon-option p-2 bg-zinc-100 dark:bg-zinc-800/50 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors text-green-500" data-icon='<svg width="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>'>
+             <svg width="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+           </button>
+         </div>
+      </div>
+    </div>
+  </PreviewBlock>
+
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.opciones.progress_title')}</h3>
+  <PreviewBlock id="toast-progress" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.info('Descargando archivo...', {\n  duration: 5000,\n  progressBar: true\n});`}>
+    <div slot="preview" class="flex justify-center">
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Progress</button>
+    </div>
+  </PreviewBlock>
+
+  <h2 id="historial" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.historial.title')}</h2>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">{t('content.historial.desc')}</p>
+  <PreviewBlock id="toast-history" lang="js" code={`import { toast } from 'wissfort';\n\nconst historial = toast.history();\nconsole.log(historial); // Array con los toasts anteriores\n\n// Para limpiar el historial:\n// toast.clearHistory();`}>
+    <div slot="preview" class="flex justify-center">
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">History</button>
+    </div>
+  </PreviewBlock>
+
+  <h2 id="configuracion" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.configuracion_global.title')}</h2>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6" set:html={t('content.configuracion_global.desc_html')} />
+
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.configuracion_global.tema_title')}</h3>
+  <PreviewBlock id="toast-theme" lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\n// Cambia globalmente el tema visual\ntoaster({ theme: 'dark' }); // 'light' | 'dark' | 'shadcn' | 'daisy'`}>
+    <div slot="preview" class="flex justify-center gap-3">
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Dark Theme</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Light Theme</button>
+    </div>
+  </PreviewBlock>
+
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.configuracion_global.formato_title')}</h3>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">{t('content.configuracion_global.formato_desc')}</p>
+  <PreviewBlock id="toast-format" lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\n// classic: Bordes definidos\n// island: Diseño más suave e integrado\ntoaster({ format: 'island' });`}>
+    <div slot="preview" class="flex justify-center gap-3">
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Classic Format</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Island Format</button>
+    </div>
+  </PreviewBlock>
+
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.configuracion_global.limite_title')}</h3>
+  <PreviewBlock id="toast-limit" lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\n// Máximo de toasts visibles al mismo tiempo\ntoaster({ maxToasts: 2 });`}>
+    <div slot="preview" class="flex justify-center gap-3">
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Limit 2</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Limit 5</button>
+    </div>
+  </PreviewBlock>
+
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.configuracion_global.behavior_title')}</h3>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4" set:html={t('content.configuracion_global.behavior_desc_html')} />
+  <PreviewBlock id="toast-behavior" lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\ntoaster({ replaceBehavior: 'wiss' }); // 'normal' | 'wiss'`}>
+    <div slot="preview" class="flex justify-center gap-3">
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Behavior Normal</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Behavior Wiss</button>
+    </div>
+  </PreviewBlock>
+
+  <h2 id="uso-astro" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.uso_astro.title')}</h2>
+  <CodeBlock lang="astro" code={`---\n// Layout.astro\n---\n<slot />\n<script>\n  import { toaster } from 'wissfort/vanilla';\n  toaster();\n</script>`} />
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">{t('content.uso_astro.desc')}</p>
+  <CodeBlock lang="js" code={`import { toast } from 'wissfort';\ntoast.success('¡Listo!');`} />
+
+  <h2 id="temas" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.temas.title')}</h2>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">{t('content.temas.desc')}</p>
+  
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.temas.shadcn_title')}</h3>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6" set:html={t('content.temas.shadcn_desc_html')} />
+  <CodeBlock lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\ntoaster({\n  theme: 'shadcn',\n  position: 'bottom-right',\n  duration: 4000,\n});`} />
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6 text-sm bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl" set:html={t('content.temas.shadcn_nota_html')} />
+
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.temas.daisyui_title')}</h3>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6" set:html={t('content.temas.daisyui_desc1_html')} />
+  <CodeBlock lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\ntoaster({\n  theme: 'daisy', // 'dark' (default) | 'light' | 'shadcn' | 'daisy'\n  position: 'bottom-right',\n  duration: 4000,\n  offset: 16,\n});`} />
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6" set:html={t('content.temas.daisyui_desc2_html')} />
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">{t('content.temas.daisyui_desc3')}</p>
+
+  <h2 id="tailwind" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.tailwind.title')}</h2>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">{t('content.tailwind.desc')}</p>
+  
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">{t('content.tailwind.v4_title')}</h3>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4" set:html={t('content.tailwind.v4_desc_html')} />
+  <CodeBlock lang="css" code={`/* app.css o globals.css */\n@import "tailwindcss";\n@source "../node_modules/wiss"; /* Ajusta la ruta si es necesario */`} />
+
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.tailwind.v3_title')}</h3>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">{t('content.tailwind.v3_desc')}</p>
+  <CodeBlock lang="js" code={`// tailwind.config.js\nexport default {\n  content: [\n    './src/**/*.{astro,html,js,ts,vue,svelte,tsx}',\n    './node_modules/wiss/dist/**/*.{js,mjs}',\n  ],\n  // ...\n};`} />
+
+  <h2 id="react" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.react.title')}</h2>
+  <CodeBlock lang="tsx" code={`import { Toaster } from 'wissfort/react';\nimport { toast } from 'wissfort';\n\nfunction App() {\n  return (\n    <>\n      <Toaster position="bottom-right" theme="dark" />\n      <button onClick={() => toast.success('¡Hecho!')}>Notify</button>\n    </>\n  );\n}`} />
+
+  <h2 id="vue" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.vue.title')}</h2>
+  <CodeBlock lang="vue" code={`<script setup>\nimport { Toaster } from 'wissfort/vue';\nimport { toast } from 'wissfort';\n</script>\n\n<template>\n  <Toaster position="bottom-right" theme="dark" />\n  <button @click="toast.success('¡Hecho!')">Notify</button>\n</template>`} />
+
+  <h2 id="svelte" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.svelte.title')}</h2>
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">{t('content.svelte.svelte5_title')}</h3>
+  <CodeBlock lang="svelte" code={`<script>\n  import { toaster } from 'wissfort/svelte';\n  import { toast } from 'wissfort';\n\n  $effect(() => toaster({ position: 'bottom-right', theme: 'dark' }));\n</script>\n\n<button onclick={() => toast.success('¡Hecho!')}>Notify</button>`} />
+  <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.svelte.svelte3_title')}</h3>
+  <CodeBlock lang="svelte" code={`<script>\n  import { onMount } from 'svelte';\n  import { toaster } from 'wissfort/svelte';\n  import { toast } from 'wissfort';\n\n  onMount(() => toaster({ position: 'bottom-right', theme: 'dark' }));\n</script>\n\n<button on:click={() => toast.success('¡Hecho!')}>Notify</button>`} />
+
+  <h2 id="roadmap" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.roadmap.title')}</h2>
+  <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">{t('content.roadmap.desc')}</p>
+  <ul class="list-disc list-inside text-zinc-600 dark:text-zinc-400 leading-relaxed mb-12 space-y-2">
+    {getTranslations(lang, 'content.roadmap.items').map((item: string) => (
+      <li>{item}</li>
+    ))}
+  </ul>
+
+  <h2 id="creditos" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.creditos.title')}</h2>
+  <ul class="list-disc list-inside text-zinc-600 dark:text-zinc-400 leading-relaxed mb-12 space-y-2">
+    {getTranslations(lang, 'content.creditos.items').map((item: string) => (
+      <li set:html={item}></li>
+    ))}
+  </ul>
+</article>
+
+<script is:inline define:vars={{ interactiveToasts }}>
+  window.i18nToasts = interactiveToasts;
+</script>
+
+<script>
+  import { toast } from 'wissfort';
+  import { toaster } from 'wissfort/vanilla';
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('.icon-option').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const block = (e.currentTarget as HTMLElement).closest('.preview-block');
+        if (!block) return;
+        const codeEl = block.querySelector('[data-code-editor]');
+        if (!codeEl) return;
+        
+        const newIcon = (e.currentTarget as HTMLElement).getAttribute('data-icon');
+        let text = codeEl.textContent || '';
+        text = text.replace(/icon:\s*(['"`])([\s\S]*?)\1/, `icon: $1${newIcon}$1`);
+        codeEl.textContent = text;
+        
+        (block.querySelector('.run-code-btn') as HTMLElement)?.click();
+      });
+    });
+
+    document.querySelectorAll('.toast-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const type = (e.target as HTMLElement).textContent?.toLowerCase().trim();
+        const i18n = (window as any).i18nToasts?.actions || {};
+        
+        switch(type) {
+          case 'success': 
+          case 'error': 
+          case 'warning': 
+          case 'info': 
+          case 'action': 
+          case 'promise': 
+            if (!(e.target as HTMLElement).closest('#playground')) {
+               if (type === 'success') toast.success(i18n.success || 'Success');
+               if (type === 'error') toast.error(i18n.error_missing_fields || 'Error');
+               if (type === 'warning') toast.warning(i18n.warning_session || 'Warning');
+               if (type === 'info') toast.info(i18n.info_update || 'Info');
+               if (type === 'action') {
+                 toast.show(i18n.action_deleted, { 
+                   action: { label: i18n.action_undo, onClick: () => console.log('Undone') } 
+                 });
+               }
+               if (type === 'promise') {
+                 toast.promise(new Promise(resolve => setTimeout(resolve, 2000)), {
+                   loading: i18n.promise_loading,
+                   success: i18n.promise_success,
+                   error: i18n.promise_error
+                 });
+               }
+            }
+            break;
+          case 'description': toast.success(i18n.desc_title, { description: i18n.desc_text }); break;
+          case 'icon': toast.info(i18n.icon_title, { icon: '🚀' }); break;
+          case 'progress': toast.info(i18n.progress_title, { duration: 5000, progressBar: true }); break;
+          case 'history': 
+            console.log(toast.history()); 
+            toast.info(i18n.history_logged); 
+            break;
+          case 'dark theme': toaster({ theme: 'dark' }); toast.success(i18n.theme_dark); break;
+          case 'light theme': toaster({ theme: 'light' }); toast.success(i18n.theme_light); break;
+          case 'classic format': toaster({ format: 'classic' }); toast.success(i18n.format_classic); break;
+          case 'island format': toaster({ format: 'island' }); toast.success(i18n.format_island); break;
+          case 'limit 2': toaster({ maxToasts: 2 }); toast.info(i18n.limit_2); break;
+          case 'limit 5': toaster({ maxToasts: 5 }); toast.info(i18n.limit_5); break;
+          case 'behavior normal': toaster({ replaceBehavior: 'normal' }); toast.info(i18n.behavior_normal); break;
+          case 'behavior wiss': toaster({ replaceBehavior: 'wiss' }); toast.info(i18n.behavior_wiss); break;
+        }
+      });
+    });
+
+    document.querySelectorAll('.sound-demo-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const soundName = (e.currentTarget as HTMLElement).getAttribute('data-sound');
+        const i18nSounds = (window as any).i18nToasts?.sounds || {};
+        
+        if (soundName) {
+          toast.info(i18nSounds.prefix?.replace('{soundName}', soundName) || `Sound: ${soundName}`, { 
+            sound: soundName,
+            description: i18nSounds[soundName] || ''
+          });
+        }
+      });
+    });
+
+    document.querySelectorAll(".run-code-btn").forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const block = (e.target as HTMLElement).closest('.preview-block');
+        if (!block) return;
+        const codeEl = block.querySelector('[data-code-editor]');
+        if (!codeEl) return;
+        
+        let rawCode = codeEl.textContent || '';
+        rawCode = rawCode.replace(/import\s+.*?;?\n/g, '');
+        
+        try {
+          new Function('toast', 'toaster', rawCode)(toast, toaster);
+        } catch(err) {
+          const i18n = (window as any).i18nToasts?.actions || {};
+          toast.error(i18n.syntax_error || 'Syntax Error');
+          console.error(err);
+        }
+      });
+    });
+  });
+</script>

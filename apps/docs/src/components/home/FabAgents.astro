@@ -1,0 +1,99 @@
+---
+import type { Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+<!-- FAB AI Agents (Vertical Stack) -->
+<div id="fab-container" class="fixed bottom-8 right-8 z-50 flex flex-col items-center gap-4 group">
+  
+  <!-- Speed Dial Items -->
+  <div class="flex flex-col items-center gap-3 transition-all duration-300 opacity-0 translate-y-8 scale-95 pointer-events-none group-[.is-open]:opacity-100 group-[.is-open]:translate-y-0 group-[.is-open]:scale-100 group-[.is-open]:pointer-events-auto origin-bottom w-14">
+    <button class="agent-fab-btn relative w-10 h-10 bg-white dark:bg-zinc-800 text-orange-500 rounded-full shadow-md flex items-center justify-center hover:bg-zinc-50 dark:hover:bg-zinc-700 border border-zinc-100 dark:border-zinc-700 transition-colors group/btn" data-fw="svelte">
+      <span class="text-xs font-bold">Sv</span>
+      <span class="absolute right-14 bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-sm font-medium px-3 py-1.5 rounded-lg shadow-sm border border-zinc-100 dark:border-zinc-700 whitespace-nowrap opacity-0 group-hover/btn:opacity-100 transition-opacity pointer-events-none">Svelte</span>
+    </button>
+    <button class="agent-fab-btn relative w-10 h-10 bg-white dark:bg-zinc-800 text-green-500 rounded-full shadow-md flex items-center justify-center hover:bg-zinc-50 dark:hover:bg-zinc-700 border border-zinc-100 dark:border-zinc-700 transition-colors group/btn" data-fw="vue">
+      <span class="text-xs font-bold">Vu</span>
+      <span class="absolute right-14 bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-sm font-medium px-3 py-1.5 rounded-lg shadow-sm border border-zinc-100 dark:border-zinc-700 whitespace-nowrap opacity-0 group-hover/btn:opacity-100 transition-opacity pointer-events-none">Vue</span>
+    </button>
+    <button class="agent-fab-btn relative w-10 h-10 bg-white dark:bg-zinc-800 text-blue-500 rounded-full shadow-md flex items-center justify-center hover:bg-zinc-50 dark:hover:bg-zinc-700 border border-zinc-100 dark:border-zinc-700 transition-colors group/btn" data-fw="react">
+      <span class="text-xs font-bold">Re</span>
+      <span class="absolute right-14 bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-sm font-medium px-3 py-1.5 rounded-lg shadow-sm border border-zinc-100 dark:border-zinc-700 whitespace-nowrap opacity-0 group-hover/btn:opacity-100 transition-opacity pointer-events-none">React</span>
+    </button>
+    <button class="agent-fab-btn relative w-10 h-10 bg-white dark:bg-zinc-800 text-yellow-500 rounded-full shadow-md flex items-center justify-center hover:bg-zinc-50 dark:hover:bg-zinc-700 border border-zinc-100 dark:border-zinc-700 transition-colors group/btn" data-fw="vanilla">
+      <span class="text-xs font-bold">JS</span>
+      <span class="absolute right-14 bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-sm font-medium px-3 py-1.5 rounded-lg shadow-sm border border-zinc-100 dark:border-zinc-700 whitespace-nowrap opacity-0 group-hover/btn:opacity-100 transition-opacity pointer-events-none">Vanilla JS</span>
+    </button>
+  </div>
+
+  <!-- Main Button -->
+  <button id="fab-main-btn" class="relative z-50 w-14 h-14 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105 active:scale-95 group/main" title="Opciones de Agente IA">
+    <!-- Default Icon (Spark) -->
+    <svg class="w-6 h-6 transition-all duration-300 absolute group-[.is-open]:scale-0 group-[.is-open]:opacity-0 group-[.is-open]:rotate-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"></path>
+      <path d="M9 21h6"></path>
+    </svg>
+    <!-- Close Icon (X) -->
+    <svg class="w-6 h-6 transition-all duration-300 absolute scale-0 opacity-0 -rotate-90 group-[.is-open]:scale-100 group-[.is-open]:opacity-100 group-[.is-open]:rotate-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+    
+    <!-- Label "agents.md" on hover -->
+    <span class="absolute right-16 bg-zinc-800 dark:bg-white text-white dark:text-zinc-900 text-sm font-semibold px-3 py-1.5 rounded-lg opacity-0 pointer-events-none group-hover/main:opacity-100 group-[.is-open]:!opacity-0 transition-opacity whitespace-nowrap shadow-md flex items-center gap-2">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+        <polyline points="13 2 13 9 20 9"></polyline>
+      </svg>
+      agents.md
+    </span>
+  </button>
+</div>
+
+<script>
+  import { toast } from 'wissfort';
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('.agent-fab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const fw = (e.currentTarget as HTMLElement).getAttribute('data-fw') || 'vanilla';
+        const prompt = `Read https://wiss-docs.vercel.app/agents/${fw}.md and follow it to install wissfort and add toast notifications to this project.`;
+        navigator.clipboard.writeText(prompt);
+        
+        const svgs: Record<string, string> = {
+          vanilla: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" class="w-5 h-5"><path fill="#F7DF1E" d="M1 1h126v126H1z"/><path fill="#000" d="M85.73 99.31c-2.48-1.52-4.04-3.76-4.71-6.72H68.83c.96 6.8 4.24 12 9.85 15.6 5.61 3.61 12.33 5.41 20.17 5.41 6.8 0 12.65-1.48 17.53-4.44 4.88-2.96 8.52-7.05 10.9-12.25 2.38-5.21 3.56-11.06 3.56-17.55 0-6.17-1.32-11.45-3.96-15.85-2.64-4.4-6.49-7.92-11.53-10.57-5.05-2.64-10.9-4.88-17.55-6.73-4.08-1.12-7.45-2.28-10.1-3.48-2.64-1.2-4.6-2.6-5.88-4.2-1.28-1.6-1.92-3.44-1.92-5.52 0-2.32.72-4.28 2.16-5.88 1.44-1.6 3.4-2.8 5.88-3.6 2.48-.8 5.32-1.2 8.53-1.2 5.04 0 9.13.92 12.25 2.76 3.12 1.84 5.36 4.36 6.72 7.57h11.77c-1.68-6.17-4.96-10.97-9.85-14.41-4.88-3.44-11.61-5.17-20.17-5.17-6.09 0 11.45 1.32 16.09 3.96 4.64 2.64 8.09 6.25 10.33 10.81 2.24 4.56 3.36 9.61 3.36 15.13 0 5.61 1.28 10.41 3.84 14.41s6.16 7.29 10.81 9.85c4.64 2.56 10.17 4.72 16.57 6.49 4.4 1.28 8.01 2.56 10.81 3.84 2.8 1.28 4.92 2.84 6.37 4.68 1.44 1.84 2.16 4.08 2.16 6.73 0 2.88-.76 5.4-2.28 7.57-1.52 2.16-3.8 3.8-6.84 4.92s-6.77 1.68-11.17 1.68c-5.84 0-10.61-1.04-14.33-3.12zM33.6 116.85c-4.24-1.92-7.53-4.84-9.85-8.77H11.5c2.64 7.69 7.37 13.65 14.17 17.89C32.48 130.2 41.53 132.32 52.82 132.32c5.93 0 11.13-.76 15.61-2.28 4.48-1.52 8.13-3.76 10.93-6.72 2.8-2.96 4.88-6.61 6.25-10.93 1.36-4.32 2.04-9.25 2.04-14.77V46.72h-12.25v50.2c0 6.65-1.04 11.85-3.12 15.61-2.08 3.76-5.13 6.45-9.13 8.05-4 1.6-8.89 2.4-14.65 2.4-5.61.03-10.53-.7-14.89-2.13z"/></svg>',
+          react: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.2 23 20.4" class="w-5 h-5" fill="#61DAFB"><circle r="2.05"/><g stroke="#61DAFB" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>',
+          vue: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 221" class="w-5 h-5" fill="none"><path d="M204.8 0H256L128 220.8L0 0H51.2L128 132.48L204.8 0Z" fill="#41B883"/><path d="M204.8 0H153.6L128 44.16L102.4 0H51.2L128 132.48L204.8 0Z" fill="#34495E"/></svg>',
+          svelte: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="#FF3E00"><path d="M19.1 7c-1.4-1.3-3.4-1.6-4.9-.6l-.1.1-2.2 1.6-2.1 1.5c-2.5 1.9-2.5 4.9 0 6.7l2 1.5c.5.3.9.6 1.3.9-1.1 1-2.6 1.5-4.1 1-1.5-.5-2.4-1.8-2.5-3.3h-2.3c.1 2.9 1.9 5.4 4.8 6.3 2.8.9 6 .0 8-2a7.4 7.4 0 001.1-1.5l1.2-.9 2.1-1.6c2.5-1.9 2.5-4.9 0-6.7l-2-1.5a7.4 7.4 0 00-1.3-.9 7 7 0 004.1-1c1.5-.5 2.4-1.8 2.5-3.3h-2.3c-.1 2.9-1.9 5.4-4.8 6.3a6 6 0 01-2.5.6l2-1.5c2.5-1.9 2.5-4.9 0-6.7zM15.8 12.1c0 0-2.1 1.5-2.1 1.5l-2.2 1.6c-1.3 1-2.9 1-4.2 0l-2-1.5c-.6-.4-.9-1-.1-1.7.4-1 1.3-1.8 2.4-2.1 1.5-.5-3.2 0-4.3 1.1a7 7 0 001.4-2l2.2-1.6 2.1-1.6c1.3-1 2.9-1 4.2 0l2 1.5c.6.4.9 1 1 1.7-.4 1-1.3 1.8-2.4 2.1-1.5.5-3.2 0-4.3-1.1a7 7 0 00-1.4 2z"/></svg>'
+        };
+
+        const i18n = (window as any).i18nToasts?.actions || {};
+        const msg = i18n.prompt_copied ? i18n.prompt_copied.replace('{fw}', fw) : `Prompt para ${fw} copiado`;
+        
+        toast.success(msg, { icon: svgs[fw] || '🤖', sound: 'success' });
+        
+        // Auto-close FAB
+        document.getElementById('fab-container')?.classList.remove('is-open');
+      });
+    });
+
+    const fabContainer = document.getElementById('fab-container');
+    const fabMainBtn = document.getElementById('fab-main-btn');
+    if (fabContainer && fabMainBtn) {
+      fabMainBtn.addEventListener('click', () => {
+        fabContainer.classList.toggle('is-open');
+      });
+
+      // Close when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!fabContainer.contains(e.target as Node)) {
+          fabContainer.classList.remove('is-open');
+        }
+      });
+    }
+  });
+</script>

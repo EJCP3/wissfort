@@ -1,0 +1,38 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from './Navbar.astro';
+import Hero from './Hero.astro';
+import Sidebar from './Sidebar.astro';
+import DocsContent from './DocsContent.astro';
+import FabAgents from './FabAgents.astro';
+import type { Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<Layout title="wissfort">
+  <Navbar lang={lang} />
+  <Hero lang={lang} />
+
+  <!-- Documentation Section -->
+  <section id="docs" class="bg-[#f8faff] dark:bg-zinc-950 min-h-screen py-24 transition-colors duration-300">
+    <div class="max-w-6xl mx-auto px-8 flex gap-16 relative">
+      <Sidebar lang={lang} />
+      <DocsContent lang={lang} />
+    </div>
+  </section>
+
+  <FabAgents lang={lang} />
+
+  <script>
+    import { toaster } from 'wissfort/vanilla';
+    
+    // Configuración inicial basada en localStorage
+    const isDark = document.documentElement.classList.contains('dark');
+    toaster({ format: 'classic', position: 'top-center', theme: isDark ? 'dark' : 'light' });
+  </script>
+</Layout>

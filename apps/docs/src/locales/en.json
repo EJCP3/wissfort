@@ -1,0 +1,199 @@
+{
+  "nav": {
+    "github": "GitHub",
+    "npm": "NPM",
+    "docs": "Docs",
+    "lang_toggle": "EN",
+    "theme_toggle_tooltip": "Change Theme",
+    "format_toggle_tooltip": "Change Format"
+  },
+  "hero": {
+    "description": "An opinionated toast component for modern apps. SVG morphing, spring physics, and a minimal API — beautiful by default.",
+    "install_command": "pnpm install wissfort",
+    "playground_link": "Playground →",
+    "documentation_link": "Documentation",
+    "try_it": "Try It",
+    "toast_buttons": {
+      "success": "Success",
+      "error": "Error",
+      "warning": "Warning",
+      "info": "Info",
+      "action": "Action",
+      "promise": "Promise"
+    }
+  },
+  "sidebar": {
+    "title": "On this page",
+    "introduccion": "Introduction",
+    "instalacion": "Installation",
+    "uso_basico": "Basic Usage",
+    "opciones_por_toast": "Options per Toast",
+    "historial": "History",
+    "configuracion_global": "Global Configuration",
+    "uso_astro": "Usage in Astro",
+    "integracion_ui": "UI Integration",
+    "tailwind_css": "Tailwind CSS",
+    "react": "React",
+    "vue": "Vue",
+    "svelte": "Svelte",
+    "roadmap": "Roadmap",
+    "creditos": "Credits"
+  },
+  "content": {
+    "introduccion": {
+      "title": "Introduction",
+      "p1": "Headless and runtime-dependency-free toast notifications library. The core (wiss) is a pure TypeScript \"brain\" —state, queue, timers— that knows nothing about the DOM or any framework. The visual layer is interchangeable: by default it brings its own themes (light and dark) or you can choose to inherit the theme from your project via daisyUI or shadcn/ui to adapt to your current design.",
+      "p2": "This phase includes a single adapter, Vanilla JS, which also works for Astro."
+    },
+    "instalacion": {
+      "title": "Installation"
+    },
+    "sonido_interacciones": {
+      "title": "Sound & Interactions",
+      "p1_html": "<strong>wissfort</strong> heavily relies on <a href=\"https://cuelume-site.pages.dev/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 dark:text-blue-400 underline font-semibold\">cuelume</a> for its sound system. This incredible library synthesizes audio live without using heavy <code>.mp3</code> files, keeping the performance impact <strong>completely zero</strong> (less than 40 KB uncompressed).",
+      "p2": "Sound is enabled by default, but if you want to disable it globally, you can do so in the configuration:",
+      "p3_html": "You can also <strong>customize the sound</strong> that plays when a single notification is fired by passing the sound name in the <code>sound</code> option:",
+      "default_sounds_title": "Default sounds:",
+      "default_sounds_desc_html": "Each toast type comes with a pre-assigned <code>cuelume</code> sound that perfectly fits its intention:",
+      "catalogo_title": "Interactive Sound Catalog",
+      "catalogo_desc": "Explore all available sounds by clicking on the buttons below. Each will trigger an info toast but with its respective custom sound."
+    },
+    "uso_basico": {
+      "title": "Basic Usage",
+      "desc_html": "Import the <code>toast</code> function to trigger different types of notifications.",
+      "simples_title": "Simple Notifications",
+      "simples_tip": "💡 You can edit the code of any example in its \"Code\" tab and run it live.",
+      "action_title": "Toast with Action",
+      "promise_title": "Toast with Promise"
+    },
+    "opciones": {
+      "title": "Options per Toast",
+      "desc": "You can pass a configuration object as the second parameter to any method to customize an individual toast.",
+      "desc_title": "Toast with Description",
+      "icon_title": "Change Icon",
+      "icon_run_code": "▶ Run Code",
+      "icon_choose": "Or pick an icon to try:",
+      "progress_title": "Progress Bar"
+    },
+    "historial": {
+      "title": "History",
+      "desc": "Wissfort keeps a record of the toasts that have appeared on screen. You can access or clear them using the API."
+    },
+    "configuracion_global": {
+      "title": "Global Configuration",
+      "desc_html": "The <code>toaster()</code> function accepts an object to configure the global behavior of all toasts.",
+      "tema_title": "Dark / Light Mode",
+      "formato_title": "Design Format (Classic vs Island)",
+      "formato_desc": "You can change the aesthetics of the notifications between a classic design or a \"dynamic island\" type.",
+      "limite_title": "Toast Limit",
+      "behavior_title": "Behavior (Replace Behavior)",
+      "behavior_desc_html": "Controls what happens when the limit is reached. <code>normal</code> stacks the notifications, <code>wiss</code> visually replaces the oldest one with an animation."
+    },
+    "uso_astro": {
+      "title": "Usage in Astro",
+      "desc": "Then, from any component or client script:"
+    },
+    "temas": {
+      "title": "Themes, daisyUI and shadcn/ui",
+      "desc": "By default, the library uses its own themes (light and dark) built with Tailwind. This ensures the toasts look good out of the box.",
+      "shadcn_title": "Integration with shadcn/ui",
+      "shadcn_desc_html": "If you use shadcn/ui (in Tailwind v4 or using absolute/hex/oklch color variables), wiss now includes native support. Set <code>theme: 'shadcn'</code> and the toasts will automatically map their colors to your project variables (like --background, --foreground, --primary, --destructive, etc.):",
+      "shadcn_nota_html": "<strong>Note:</strong> If you are using an older version of shadcn where variables only export the raw HSL values (e.g. 0 0% 100%), you can still use <code>theme: 'light'</code> or <code>'dark'</code> and map the <code>--wiss-*</code> variables in your globals.css file by wrapping them in the hsl() function.",
+      "daisyui_title": "Integration with daisyUI",
+      "daisyui_desc1_html": "If you prefer the toasts to inherit the active daisyUI style (light, dark, cyberpunk, etc.), you can use <code>theme: 'daisy'</code>:",
+      "daisyui_desc2_html": "With <code>theme: 'daisy'</code>, wiss injects daisyUI classes (alert, alert-success, alert-error, ...) instead of its own. Thus, the final color is resolved by the daisyUI theme configured in your project.",
+      "daisyui_desc3": "If you don't need to integrate it with daisyUI or prefer the default wiss styles, simply don't pass the theme property (or use 'light'/'dark') and it will use the default theme."
+    },
+    "tailwind": {
+      "title": "Tailwind CSS Configuration",
+      "desc": "The wiss themes come with utility classes built into the library code (node_modules). For styles to apply correctly, you must tell Tailwind to process these files.",
+      "v4_title": "For Tailwind CSS v4 (and DaisyUI 5)",
+      "v4_desc_html": "In version 4, Tailwind uses CSS-based configuration. Simply add the <code>@source</code> directive in your main CSS file (where you import tailwind) pointing to the library:",
+      "v3_title": "For Tailwind CSS v3 (and DaisyUI 4)",
+      "v3_desc": "If you are still using version 3 of Tailwind, you must add the wiss path to the content array in your configuration file:"
+    },
+    "react": {
+      "title": "Usage in React"
+    },
+    "vue": {
+      "title": "Usage in Vue"
+    },
+    "svelte": {
+      "title": "Usage in Svelte",
+      "svelte5_title": "For Svelte 5:",
+      "svelte3_title": "For Svelte 3/4:"
+    },
+    "roadmap": {
+      "title": "Roadmap",
+      "desc": "Out of scope in this phase, planned for later:",
+      "items": [
+        "Website/Docs improvements",
+        "Usage demo for framework adapters.",
+        "Add new formats: customized for users who don't use daisyui or shadcn/ui.",
+        "Add new animations and document them.",
+        "Implement performance improvements.",
+        "Add new icons for notifications.",
+        "Add new sounds for notifications.",
+        "Add new themes"
+      ]
+    },
+    "creditos": {
+      "title": "Credits",
+      "items": [
+        "<strong>Visual Design:</strong> The base aesthetic (with glassmorphism effects and soft borders) is inspired by the design of Sileo UI.",
+        "<strong>Notification sound:</strong> the mini notification sounds are from Cuelume."
+      ]
+    }
+  },
+  "interactive_toasts": {
+    "toggles": {
+      "dark_mode": "Dark mode activated",
+      "light_mode": "Light mode activated",
+      "format_changed": "Format changed to {currentFormat}",
+      "lang_changed": "Language changed to {currentLang} (Coming soon)"
+    },
+    "actions": {
+      "success": "Event has been created",
+      "error_missing_fields": "Missing required fields",
+      "warning_session": "Your session will expire soon",
+      "info_update": "New software update available",
+      "action_deleted": "Item deleted",
+      "action_undo": "Undo",
+      "promise_loading": "Loading data...",
+      "promise_success": "Data loaded successfully!",
+      "promise_error": "Error loading data",
+      "desc_title": "File saved!",
+      "desc_text": "The file was saved successfully in your local folder.",
+      "icon_title": "New update",
+      "progress_title": "Downloading file...",
+      "history_logged": "History printed to console. Open DevTools to view it.",
+      "theme_dark": "Dark theme activated",
+      "theme_light": "Light theme activated",
+      "format_classic": "Classic format activated",
+      "format_island": "Island format activated",
+      "limit_2": "Limit changed to 2. Spam clicks to test.",
+      "limit_5": "Limit changed to 5.",
+      "behavior_normal": "Normal behavior activated (Stack)",
+      "behavior_wiss": "Wiss behavior activated (Replace)",
+      "syntax_error": "Syntax error in the code",
+      "prompt_copied": "Prompt for {fw} copied"
+    },
+    "sounds": {
+      "chime": "Soft rising two-note chime (Default hover)",
+      "sparkle": "Fast four-note twinkle (Playful accents)",
+      "droplet": "Single note sliding down (Dismiss, collapse)",
+      "bloom": "Slow and warm rise (Reveal, expand)",
+      "whisper": "Quiet and airy rise (Dense lists)",
+      "tick": "Instant sharp tick (Navigation hover)",
+      "press": "Muffled dull thud (Press click)",
+      "release": "Bright bouncy tick (Release click)",
+      "toggle": "Mechanical click-clack (Switches, tabs)",
+      "success": "Warm three-note confirmation (Successful action)",
+      "error": "Soft thud and descending rejection (Recoverable errors)",
+      "page": "Paper flick with glass tick (Pages, galleries)",
+      "loading": "Brief rising shimmer (Starting task)",
+      "ready": "Focused tick with harmonic rise (Content loaded)",
+      "prefix": "Sound: {soundName}"
+    }
+  }
+}
