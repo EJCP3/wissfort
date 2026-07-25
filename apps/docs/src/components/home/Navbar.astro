@@ -11,7 +11,7 @@ const t = useTranslations(lang);
 ---
 <!-- Navbar -->
 <nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md transition-colors duration-300">
-  <div class="font-bold text-lg tracking-tight">wissfort</div>
+  <div class="font-bold text-lg tracking-tight"><span id="nav-text" class="text-zinc-900 dark:text-zinc-100 transition-colors duration-300">wissfort</span><span id="nav-dot" class="text-zinc-300 transition-colors duration-300">.</span></div>
   <div class="flex items-center gap-6 text-sm font-medium text-zinc-500 dark:text-zinc-400">
     <a href="https://github.com/EJCP3/wissfort" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">{t('nav.github')}</a>
     <a href="https://www.npmjs.com/package/wissfort" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">{t('nav.npm')}</a>
@@ -28,7 +28,7 @@ const t = useTranslations(lang);
     </button>
 
     <button id="format-toggle" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors font-mono text-xs bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-zinc-700" title={t('nav.format_toggle_tooltip')}>
-      classic
+      wiss
     </button>
   </div>
 </nav>
@@ -55,21 +55,37 @@ const t = useTranslations(lang);
       }
     });
 
-    let currentFormat = 'classic';
+    let currentFormat = 'wiss';
     const formatToggle = document.getElementById('format-toggle');
-    formatToggle?.addEventListener('click', (e) => {
-      currentFormat = currentFormat === 'classic' ? 'island' : 'classic';
-      toaster({ format: currentFormat });
-      if (e.currentTarget) (e.currentTarget as HTMLElement).textContent = currentFormat;
-      
-      const i18n = (window as any).i18nToasts;
-      if (i18n) {
-        const msg = i18n.toggles.format_changed.replace('{currentFormat}', currentFormat);
-        toast.success(msg);
-      } else {
-        toast.success(`Formato cambiado a ${currentFormat}`);
-      }
-    });
+    if (formatToggle) {
+      formatToggle.textContent = 'wiss';
+      formatToggle.addEventListener('click', (e) => {
+        currentFormat = currentFormat === 'wiss' ? 'island' : 'wiss';
+        const font = currentFormat === 'wiss' ? '"IBM Plex Mono", monospace' : '"IBM Plex Sans", sans-serif';
+        toaster({ format: currentFormat as any, fontFamily: font });
+        if (e.currentTarget) (e.currentTarget as HTMLElement).textContent = currentFormat;
+        
+        const heroText = document.getElementById('hero-text');
+        const navText = document.getElementById('nav-text');
+        [heroText, navText].filter(Boolean).forEach(text => {
+          if (currentFormat === 'wiss') {
+            text?.classList.remove('font-sans');
+            text?.classList.add('font-mono');
+          } else {
+            text?.classList.remove('font-mono');
+            text?.classList.add('font-sans');
+          }
+        });
+        
+        const i18n = (window as any).i18nToasts;
+        if (i18n) {
+          const msg = i18n.toggles.format_changed.replace('{currentFormat}', currentFormat);
+          toast.success(msg);
+        } else {
+          toast.success(`Formato cambiado a ${currentFormat}`);
+        }
+      });
+    }
 
     const langToggle = document.getElementById('lang-toggle');
     langToggle?.addEventListener('click', () => {

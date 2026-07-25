@@ -1,66 +1,112 @@
-# wissfort AI Agent Instructions
+# Wissfort AI Agent Instructions
 
-When building projects with `wissfort` (an opinionated toast component), follow these instructions to get the best results.
+Wissfort is an opinionated, highly aesthetic toast notification library for the web.
+It features SVG morphing, spring physics, and built-in interactive sounds via Web Audio.
+Import it, call `toast.success()`, and you're done. No external CSS files needed.
 
-## Installation
-Use standard package managers:
-```bash
+This page is the complete guide for AI agents adding wissfort to a vanilla project.
+
+- npm: https://www.npmjs.com/package/wissfort
+- repo: https://github.com/euddy/wissfort
+
+## Quickstart
+
+Install with any package manager:
+
+```sh
 npm install wissfort
-# or
-pnpm add wissfort
+# or: yarn add wissfort · pnpm add wissfort · bun add wissfort
 ```
 
-## Setup
-Import the `toast` and `toaster` functions into your components or vanilla JS. The styles are injected automatically.
+Then wire it up in your app entry point:
 
-```javascript
-import { toast, toaster } from 'wissfort';
+```ts
+import { toaster } from "wissfort/vanilla"; // Use wissfort/vanilla for non-framework setup
+import { toast } from "wissfort";
 
-// Optional: Global configuration
+// 1. Configure globals (Optional)
 toaster({
   position: 'bottom-right',
-  theme: 'dark', // 'light', 'dark', 'system'
-  format: 'island', // 'classic', 'island'
+  theme: 'dark', // 'light', 'dark', 'glass', 'neon', 'pastel', 'brutal', 'pop'
+  format: 'wiss', // 'wiss', 'island'
+});
+
+// 2. Trigger notifications from anywhere
+toast.success('User updated successfully');
+```
+
+Wissfort is **ESM-only** and targets modern browsers. CSS is injected automatically.
+
+## API (complete)
+
+### 1. Global Setup: `toaster(config)`
+
+Call `toaster()` once to set global defaults.
+
+```ts
+import { toaster } from "wissfort/vanilla";
+
+toaster({
+  theme: 'glass',        // Visual theme
+  format: 'island',      // Design format ('wiss' for borders, 'island' for dynamic pill)
+  position: 'top-center',// 'top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'
+  duration: 4000,        // Auto-dismiss in ms
+  maxToasts: 5,          // Max visible on screen
+  replaceBehavior: 'wiss', // 'normal' (stack) or 'wiss' (visually replace oldest)
+  sound: true            // Enable/disable cuelume sounds globally
 });
 ```
 
-## Basic Usage
-```javascript
-toast.success('User updated successfully');
-toast.error('Failed to update user');
-toast.info('New message received');
-toast.warning('Session expiring soon');
-```
+### 2. Notifications: `toast`
 
-## Sound Configuration
-`wissfort` uses `cuelume` for extremely lightweight, synthesized audio interaction feedback.
-Sounds are enabled by default. To disable them globally:
-```javascript
-toaster({ sound: false });
-```
-To play a specific sound for a single toast, pass the `sound` option:
-```javascript
-toast.info('Incoming call', { sound: 'chime' });
-toast.success('Saved', { sound: 'sparkle' });
-```
-Available sounds: `chime`, `sparkle`, `droplet`, `bloom`, `whisper`, `tick`, `press`, `release`, `toggle`, `success`, `error`, `page`, `loading`, `ready`.
+```ts
+import { toast } from "wissfort";
 
-## Promises
-```javascript
+// Basic types (automatically pick good defaults and icons)
+toast.success('Payment received');
+toast.error('Connection lost');
+toast.warning('Session expiring');
+toast.info('New update available');
+
+// Advanced: with description, custom icon, action button, and specific sound
+toast.show('File deleted', {
+  description: 'The file has been permanently removed.',
+  icon: '🗑️', // string, HTML string, or SVG
+  sound: 'droplet', // from cuelume's 14-sound palette
+  action: {
+    label: 'Undo',
+    onClick: () => toast.success('Restored!')
+  }
+});
+
+// Promises
 toast.promise(fetch('/api/data'), {
   loading: 'Fetching data...',
   success: 'Data loaded!',
   error: 'Error loading data'
 });
+
+// History & Lifecycle
+const history = toast.history(); // Get array of previous toasts
+toast.clearHistory(); // Remove all toasts immediately
 ```
 
-## Rich Text & Actions
-```javascript
-toast.success('File saved', {
-  description: 'The file has been saved to your local directory.',
-  action: {
-    label: 'Undo',
-    onClick: () => console.log('Undo clicked')
-  }
-});
+## Sound Integration (Powered by Cuelume)
+
+Wissfort deeply integrates `cuelume` for extremely lightweight, synthesized audio feedback.
+Sounds play automatically for different toast types (`success` plays the "success" chime, etc).
+
+To customize or disable a sound for a single toast:
+```ts
+toast.success('Saved', { sound: 'sparkle' });
+toast.info('Silent message', { sound: false });
 ```
+
+Available sounds (pick semantically): `chime`, `sparkle`, `droplet`, `bloom`, `whisper`, `tick`, `press`, `release`, `toggle`, `success`, `error`, `page`, `loading`, `ready`.
+
+## Guidance for good design
+
+- Use `format: 'wiss'` for a classic, defined-border look, and `format: 'island'` for a sleek, integrated pill shape.
+- Use `theme: 'glass'` alongside `format: 'island'` on visually noisy backgrounds for a stunning frosted glass effect.
+- Only show toasts for **outcomes the user caused** (saves, deletes, errors). Avoid spamming the user with background system events.
+- Let the component handle its own styling; avoid overriding internal CSS classes.

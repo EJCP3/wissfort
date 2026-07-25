@@ -143,7 +143,7 @@
   overflow: visible;
 }
 
-/* Classic mode: apply dynamic SVG filters (glows, hard shadows) based on theme */
+/* Wiss mode: apply dynamic SVG filters (glows, hard shadows) based on theme */
 [data-wiss-toast] [data-wiss-svg] {
   /* Use a dedicated variable for SVG opacity to survive gooey filter alpha-crushing */
   opacity: var(--wiss-svg-opacity, 1);

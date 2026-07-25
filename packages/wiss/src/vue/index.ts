@@ -47,7 +47,7 @@ export const Toaster = defineComponent({
       default: undefined,
     },
     format: {
-      type: String as PropType<'classic' | 'island'>,
+      type: String as PropType<'wiss' | 'island'>,
       default: undefined,
     },
     offset: {

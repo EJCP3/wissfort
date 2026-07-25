@@ -45,7 +45,7 @@ export interface WissConfig {
   position?: Position;
   duration?: number;
   theme?: string;
-  format?: 'classic' | 'island';
+  format?: 'wiss' | 'island';
   offset?: number;
   progressBar?: boolean;
   maxToasts?: number;

@@ -6,8 +6,7 @@ no sabe nada del DOM ni de ningún framework. La capa visual es intercambiable:
 por defecto trae sus propios temas (**light** y **dark**) o puedes optar
 por heredar el tema de tu proyecto vía **daisyUI** o **shadcn/ui** para que se adapte a tu diseño actual.
 
-Esta fase incluye un único adaptador, **Vanilla JS**, que también sirve para
-Astro.
+
 
 ## Instalación
 

@@ -1,44 +1,120 @@
-# wissfort Svelte AI Agent Instructions
+# Wissfort Svelte AI Agent Instructions
 
-When building projects with `wissfort` (an opinionated toast component), follow these instructions for Svelte:
+Wissfort is an opinionated, highly aesthetic toast notification library for the web.
+It features SVG morphing, spring physics, and built-in interactive sounds via Web Audio.
+Import it, call `toast.success()`, and you're done. No external CSS files needed.
 
-## Installation
-```bash
+This page is the complete guide for AI agents adding wissfort to a Svelte project.
+
+- npm: https://www.npmjs.com/package/wissfort
+- repo: https://github.com/euddy/wissfort
+
+## Quickstart
+
+Install with any package manager:
+
+```sh
 npm install wissfort
-# or
-pnpm add wissfort
+# or: yarn add wissfort · pnpm add wissfort · bun add wissfort
 ```
 
-## Setup
-Use the `toaster` function from `wissfort/svelte` in your root layout/component.
+Then wire it up in your root component (`+layout.svelte` or `App.svelte`):
 
-### Svelte 5
 ```svelte
 <script>
-  import { toaster } from 'wissfort/svelte';
-  import { toast } from 'wissfort';
-
-  $effect(() => toaster({ position: 'bottom-right', theme: 'dark', format: 'island' }));
+  import { Toaster } from "wissfort/svelte";
+  import { toast } from "wissfort";
 </script>
 
-<button onclick={() => toast.success('¡Hecho!')}>Notify</button>
+<Toaster 
+  position="bottom-right" 
+  theme="dark" <!-- 'light', 'dark', 'glass', 'neon', 'pastel', 'brutal', 'pop' -->
+  format="wiss" <!-- 'wiss', 'island' -->
+/>
+<button on:click={() => toast.success('Saved successfully')}>Save</button>
 ```
 
-### Svelte 3/4
+Wissfort is **ESM-only** and targets modern browsers. CSS is injected automatically.
+
+## API (complete)
+
+### 1. Global Setup: `<Toaster />`
+
+Render `<Toaster />` once. It accepts global defaults as props:
+
+```svelte
+<Toaster 
+  theme="glass"        
+  format="island"      
+  position="top-center"
+  duration={4000}      
+  maxToasts={5}        
+  replaceBehavior="wiss" 
+  sound={true}         
+/>
+```
+
+### 2. Notifications: `toast`
+
+```ts
+import { toast } from "wissfort";
+
+// Basic types (automatically pick good defaults and icons)
+toast.success('Payment received');
+toast.error('Connection lost');
+toast.warning('Session expiring');
+toast.info('New update available');
+
+// Advanced: with description, custom icon, action button, and specific sound
+toast.show('File deleted', {
+  description: 'The file has been permanently removed.',
+  icon: '🗑️', // string, HTML string, or SVG
+  sound: 'droplet', // from cuelume's 14-sound palette
+  action: {
+    label: 'Undo',
+    onClick: () => toast.success('Restored!')
+  }
+});
+
+// Promises
+toast.promise(fetch('/api/data'), {
+  loading: 'Fetching data...',
+  success: 'Data loaded!',
+  error: 'Error loading data'
+});
+
+// History & Lifecycle
+toast.clearHistory(); // Remove all toasts immediately
+```
+
+### 3. State: `useToastHistory`
+Read the toast state reactively in your components.
 ```svelte
 <script>
-  import { onMount } from 'svelte';
-  import { toaster } from 'wissfort/svelte';
-  import { toast } from 'wissfort';
-
-  onMount(() => toaster({ position: 'bottom-right', theme: 'dark', format: 'island' }));
+  import { useToastHistory } from 'wissfort/svelte';
+  
+  const history = useToastHistory(); // Returns a Svelte store
 </script>
 
-<button on:click={() => toast.success('¡Hecho!')}>Notify</button>
+<div>{$history.length} toasts shown.</div>
 ```
 
-## Sounds
-`wissfort` uses `cuelume` for sounds. Pass specific sounds via:
-```javascript
-toast.success('Done', { sound: 'sparkle' })
+## Sound Integration (Powered by Cuelume)
+
+Wissfort deeply integrates `cuelume` for extremely lightweight, synthesized audio feedback.
+Sounds play automatically for different toast types (`success` plays the "success" chime, etc).
+
+To customize or disable a sound for a single toast:
+```ts
+toast.success('Saved', { sound: 'sparkle' });
+toast.info('Silent message', { sound: false });
 ```
+
+Available sounds (pick semantically): `chime`, `sparkle`, `droplet`, `bloom`, `whisper`, `tick`, `press`, `release`, `toggle`, `success`, `error`, `page`, `loading`, `ready`.
+
+## Guidance for good design
+
+- Use `format="wiss"` for a classic, defined-border look, and `format="island"` for a sleek, integrated pill shape.
+- Use `theme="glass"` alongside `format="island"` on visually noisy backgrounds for a stunning frosted glass effect.
+- Only show toasts for **outcomes the user caused** (saves, deletes, errors). Avoid spamming the user with background system events.
+- Let the component handle its own styling; avoid overriding internal CSS classes.

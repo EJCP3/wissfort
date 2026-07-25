@@ -12,8 +12,8 @@ const t = useTranslations(lang);
 <!-- Hero Section -->
 <section class="min-h-screen flex flex-col items-center justify-center relative pt-24 pb-12">
   <div class="text-center space-y-6 max-w-2xl px-4">
-    <h1 class="text-6xl md:text-[5rem] font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-      wissfort<span class="text-zinc-300">.</span>
+    <h1 class="text-7xl md:text-[6rem] font-bold tracking-tight">
+      <span id="hero-text" class="text-zinc-900 dark:text-zinc-100 transition-colors duration-300">wissfort</span><span id="hero-dot" class="text-zinc-300 transition-colors duration-300">.</span>
     </h1>
     <p class="text-zinc-500 text-lg leading-relaxed max-w-lg mx-auto">
       {t('hero.description')}

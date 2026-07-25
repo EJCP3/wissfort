@@ -35,7 +35,7 @@
 /* 
  * 1. GLASS THEME 
  * Translucent frosted glass effect.
- * Classic format uses --wiss-svg-bg and --wiss-svg-opacity.
+ * Wiss format uses --wiss-svg-bg and --wiss-svg-opacity.
  * Island format uses --wiss-bg, backdrop-filter, border, and shadow.
  */
 .wiss-theme-glass {
@@ -45,7 +45,7 @@
   --wiss-border: 1px solid rgba(255, 255, 255, 0.3);
   --wiss-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
   
-  /* For Classic format */
+  /* For Wiss format */
   --wiss-svg-bg: #d4d4d8;
   --wiss-svg-opacity: 0.95;
   
@@ -66,7 +66,7 @@
   --wiss-bg: rgba(255, 255, 255, 0.15);
   --wiss-border: 1px solid rgba(255, 255, 255, 0.15);
   
-  /* For Classic format */
+  /* For Wiss format */
   --wiss-svg-bg: #3f3f46;
   --wiss-svg-opacity: 0.92;
   

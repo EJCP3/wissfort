@@ -4,7 +4,7 @@ export interface ResolvedConfig {
   position: Position;
   duration: number;
   theme: string;
-  format: 'classic' | 'island';
+  format: 'wiss' | 'island';
   offset: number;
   progressBar: boolean;
   maxToasts: number;
@@ -20,7 +20,7 @@ const defaultConfig: ResolvedConfig = {
   position: 'bottom-right',
   duration: 4000,
   theme: 'dark',
-  format: 'classic',
+  format: 'wiss',
   offset: 16,
   progressBar: false,
   maxToasts: 5,
