@@ -2,7 +2,7 @@ import es from '../locales/es.json';
 import en from '../locales/en.json';
 
 export type Lang = 'es' | 'en';
-export const defaultLang: Lang = 'es';
+export const defaultLang: Lang = 'en';
 
 const ui = {
   es,

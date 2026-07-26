@@ -1,4 +1,8 @@
 {
+  "meta": {
+    "title": "wissfort - Una librería de notificaciones con opinión",
+    "description": "Un componente de toast minimalista. Animaciones fluidas, físicas de resorte y una API limpia — hermoso por defecto."
+  },
   "nav": {
     "github": "GitHub",
     "npm": "NPM",

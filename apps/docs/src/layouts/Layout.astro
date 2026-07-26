@@ -3,17 +3,26 @@ import '@fontsource/ibm-plex-sans';
 import '@fontsource/ibm-plex-mono';
 import '../styles/global.css';
 import { ViewTransitions } from 'astro:transitions';
+import { useTranslations, type Lang, defaultLang } from '../i18n/utils';
 
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
+  lang?: Lang;
 }
 
-const { title, description = "wissfort - An opinionated toast component" } = Astro.props;
+const { lang = defaultLang, title, description } = Astro.props;
+const t = useTranslations(lang);
+
+const finalTitle = title || t('meta.title');
+const finalDescription = description || t('meta.description');
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
+const ogImage = lang === 'es' ? '/es-image.png' : '/en-image.png';
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <ViewTransitions />
     <script is:inline>
@@ -24,11 +33,29 @@ const { title, description = "wissfort - An opinionated toast component" } = Ast
       }
     </script>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    
+    <!-- Meta -->
+    <title>{finalTitle}</title>
+    <meta name="title" content={finalTitle} />
+    <meta name="description" content={finalDescription} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={finalTitle} />
+    <meta property="og:description" content={finalDescription} />
+    <meta property="og:image" content={new URL(ogImage, canonicalURL)} />
+    <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_US'} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={finalTitle} />
+    <meta property="twitter:description" content={finalDescription} />
+    <meta property="twitter:image" content={new URL(ogImage, canonicalURL)} />
   </head>
   <body transition:animate="none" class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased min-h-screen selection:bg-zinc-200 dark:selection:bg-zinc-800 transition-colors duration-300">
     <slot />

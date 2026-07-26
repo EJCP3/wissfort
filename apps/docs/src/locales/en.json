@@ -1,4 +1,8 @@
 {
+  "meta": {
+    "title": "wissfort - An opinionated toast component",
+    "description": "A minimalist toast component. SVG morphing, spring physics, and a clean API — beautiful by default."
+  },
   "nav": {
     "github": "GitHub",
     "npm": "NPM",
