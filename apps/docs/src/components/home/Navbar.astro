@@ -89,10 +89,10 @@ const t = useTranslations(lang);
 
     const langToggle = document.getElementById('lang-toggle');
     langToggle?.addEventListener('click', () => {
-      const isEn = window.location.pathname.startsWith('/en');
-      sessionStorage.setItem('lang_changed', isEn ? 'es' : 'en');
+      const isEs = window.location.pathname.startsWith('/es');
+      sessionStorage.setItem('lang_changed', isEs ? 'en' : 'es');
       sessionStorage.setItem('scroll_y', window.scrollY.toString());
-      navigate(isEn ? '/' : '/en/');
+      navigate(isEs ? '/' : '/es/');
     });
 
     // Restore scroll if we just changed language
