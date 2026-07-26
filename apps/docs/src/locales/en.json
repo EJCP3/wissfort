@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "wissfort - An opinionated toast component",
-    "description": "A minimalist toast component. SVG morphing, spring physics, and a clean API — beautiful by default."
+    "description": "Dependency-free toast notification library that adapts to your design or provides default themes. Includes spring physics, interactive sounds, and a minimalist API."
   },
   "nav": {
     "github": "GitHub",
