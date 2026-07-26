@@ -44,18 +44,19 @@ const ogImage = lang === 'es' ? '/es-image.png' : '/en-image.png';
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content="Wissfort" />
+    <meta property="og:url" content={canonicalURL.toString()} />
     <meta property="og:title" content={finalTitle} />
     <meta property="og:description" content={finalDescription} />
-    <meta property="og:image" content={new URL(ogImage, canonicalURL)} />
+    <meta property="og:image" content={new URL(ogImage, canonicalURL).toString()} />
     <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_US'} />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={finalTitle} />
-    <meta property="twitter:description" content={finalDescription} />
-    <meta property="twitter:image" content={new URL(ogImage, canonicalURL)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL.toString()} />
+    <meta name="twitter:title" content={finalTitle} />
+    <meta name="twitter:description" content={finalDescription} />
+    <meta name="twitter:image" content={new URL(ogImage, canonicalURL).toString()} />
   </head>
   <body transition:animate="none" class="bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased min-h-screen selection:bg-zinc-200 dark:selection:bg-zinc-800 transition-colors duration-300">
     <slot />
