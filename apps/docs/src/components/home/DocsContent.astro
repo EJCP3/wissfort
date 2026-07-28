@@ -12,7 +12,7 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const interactiveToasts = getTranslations(lang, 'interactive_toasts');
 ---
-<article class="flex-1 max-w-2xl prose prose-zinc prose-a:text-zinc-900 dark:text-zinc-100 pb-32">
+<article class="flex-1 min-w-0 w-full max-w-2xl prose prose-zinc prose-a:text-zinc-900 dark:text-zinc-100 pb-32">
   <h2 id="introduccion" class="text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">{t('content.introduccion.title')}</h2>
   <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">
     {t('content.introduccion.p1')}

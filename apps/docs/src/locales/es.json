@@ -2,7 +2,7 @@
   "meta": {
     "title": "wissfort - Una librería de notificaciones con opinión",
     "description": "Librería de notificaciones (toast) sin dependencias que se adapta a tu diseño o te ofrece temas por defecto. Incluye físicas de resorte, sonidos interactivos y una API minimalista."
-  },
+  },  
   "nav": {
     "github": "GitHub",
     "npm": "NPM",

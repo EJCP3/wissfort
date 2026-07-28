@@ -10,14 +10,14 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 <!-- Navbar -->
-<nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md transition-colors duration-300">
+<nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-8 py-4 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md transition-colors duration-300">
   <div class="font-bold text-lg tracking-tight"><span id="nav-text" class="text-zinc-900 dark:text-zinc-100 transition-colors duration-300">wissfort</span><span id="nav-dot" class="text-zinc-300 transition-colors duration-300">.</span></div>
-  <div class="flex items-center gap-6 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-    <a href="https://github.com/EJCP3/wissfort" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">{t('nav.github')}</a>
-    <a href="https://www.npmjs.com/package/wissfort" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">{t('nav.npm')}</a>
-    <a href="#docs" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">{t('nav.docs')}</a>
+  <div class="flex items-center gap-4 md:gap-6 text-sm font-medium text-zinc-500 dark:text-zinc-400">
+    <a href="https://github.com/EJCP3/wissfort" target="_blank" rel="noopener noreferrer" class="hidden md:inline-block hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">{t('nav.github')}</a>
+    <a href="https://www.npmjs.com/package/wissfort" target="_blank" rel="noopener noreferrer" class="hidden md:inline-block hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">{t('nav.npm')}</a>
+    <a href="#docs" class="hidden md:inline-block hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">{t('nav.docs')}</a>
 
-    <div class="w-px h-4 bg-zinc-300 dark:bg-zinc-700"></div>
+    <div class="hidden md:block w-px h-4 bg-zinc-300 dark:bg-zinc-700"></div>
     
     <button id="lang-toggle" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors font-medium">{t('nav.lang_toggle')}</button>
     
@@ -30,8 +30,22 @@ const t = useTranslations(lang);
     <button id="format-toggle" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors font-mono text-xs bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-zinc-700" title={t('nav.format_toggle_tooltip')}>
       wiss
     </button>
+
+    <!-- Mobile Menu Toggle -->
+    <button id="mobile-menu-toggle" class="md:hidden flex flex-col justify-center gap-[5px] w-6 h-6 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors z-50 ml-1" aria-label="Menu">
+      <span class="w-full h-[2px] bg-current rounded-full transition-all duration-300 origin-center"></span>
+      <span class="w-full h-[2px] bg-current rounded-full transition-all duration-300"></span>
+      <span class="w-full h-[2px] bg-current rounded-full transition-all duration-300 origin-center"></span>
+    </button>
   </div>
 </nav>
+
+<!-- Mobile Menu Drawer -->
+<div id="mobile-menu" class="fixed inset-0 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-all duration-300">
+  <a href="https://github.com/EJCP3/wissfort" target="_blank" rel="noopener noreferrer" class="mobile-link text-2xl font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">{t('nav.github')}</a>
+  <a href="https://www.npmjs.com/package/wissfort" target="_blank" rel="noopener noreferrer" class="mobile-link text-2xl font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">{t('nav.npm')}</a>
+  <a href="#docs" class="mobile-link text-2xl font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">{t('nav.docs')}</a>
+</div>
 
 <script>
   import { toaster } from 'wissfort/vanilla';
@@ -39,6 +53,41 @@ const t = useTranslations(lang);
   import { navigate } from 'astro:transitions/client';
   
   document.addEventListener('astro:page-load', () => {
+    // Mobile Menu
+    const mobileToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+    const spans = mobileToggle?.querySelectorAll('span');
+
+    let menuOpen = false;
+    const toggleMenu = () => {
+      menuOpen = !menuOpen;
+      if (menuOpen) {
+        mobileMenu?.classList.remove('opacity-0', 'pointer-events-none');
+        mobileMenu?.classList.add('opacity-100', 'pointer-events-auto');
+        document.body.style.overflow = 'hidden';
+        if (spans && spans.length === 3) {
+          spans[0].style.transform = 'translateY(7px) rotate(45deg)';
+          spans[1].style.opacity = '0';
+          spans[2].style.transform = 'translateY(-7px) rotate(-45deg)';
+        }
+      } else {
+        mobileMenu?.classList.remove('opacity-100', 'pointer-events-auto');
+        mobileMenu?.classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = '';
+        if (spans && spans.length === 3) {
+          spans[0].style.transform = 'none';
+          spans[1].style.opacity = '1';
+          spans[2].style.transform = 'none';
+        }
+      }
+    };
+
+    mobileToggle?.addEventListener('click', toggleMenu);
+    mobileLinks.forEach(link => link.addEventListener('click', () => {
+      if (menuOpen) toggleMenu();
+    }));
+
     // Navbar Toggles
     const themeToggle = document.getElementById('theme-toggle');
     themeToggle?.addEventListener('click', () => {
