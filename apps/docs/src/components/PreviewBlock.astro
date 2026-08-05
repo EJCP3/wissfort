@@ -1,57 +1,80 @@
 ---
 import { Code } from 'astro:components';
+import { useTranslations, defaultLang, type Lang as UILang } from '../i18n/utils';
 
 interface Props {
   id: string;
   code: string;
   lang: any;
+  uiLang?: UILang;
 }
 
-const { id, code, lang } = Astro.props;
+const { id, code, lang, uiLang = defaultLang } = Astro.props;
+const t = useTranslations(uiLang);
 ---
 
 <div class="border border-zinc-200/80 dark:border-zinc-800 rounded-xl bg-white dark:bg-[#121214] mb-12 overflow-hidden preview-block group shadow-sm" data-id={id}>
-  <div class="flex items-center px-4 border-b border-zinc-100 dark:border-zinc-800 text-[13px] font-medium">
-    <button class="tab-btn px-4 py-3 text-zinc-900 dark:text-zinc-100 border-b-[2px] border-black dark:border-white -mb-[1px]" data-target="preview">Preview</button>
-    <button class="tab-btn px-4 py-3 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300 border-b-[2px] border-transparent -mb-[1px]" data-target="code">Code</button>
+  <div class="flex items-center px-4 border-b border-zinc-100 dark:border-zinc-800 text-[13px] font-medium" role="tablist">
+    <button type="button" role="tab" aria-selected="true" class="tab-btn px-4 py-3 text-zinc-900 dark:text-zinc-100 border-b-[2px] border-black dark:border-white -mb-[1px]" data-target="preview">{t('ui.preview')}</button>
+    <button type="button" role="tab" aria-selected="false" class="tab-btn px-4 py-3 text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300 border-b-[2px] border-transparent -mb-[1px]" data-target="code">{t('ui.code')}</button>
   </div>
-  
+
   <div class="p-4 sm:p-16 flex justify-center items-center bg-white dark:bg-[#121214] tab-content min-h-[200px]" data-content="preview">
     <slot name="preview" />
   </div>
 
   <div class="hidden bg-[#f2f5f9] dark:bg-[#1a1a1e] p-4 sm:p-6 text-[13px] leading-loose font-mono relative tab-content" data-content="code">
-    <button class="absolute top-4 right-4 bg-white/80 hover:bg-white dark:bg-zinc-800/80 dark:hover:bg-zinc-800 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 rounded-lg p-2 opacity-0 group-hover:opacity-100 transition-opacity border border-zinc-200/50 dark:border-zinc-700 shadow-sm z-10" onclick={`navigator.clipboard.writeText(this.nextElementSibling.textContent)`} aria-label="Copiar código">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+    <button type="button" class="copy-code-btn absolute top-4 right-4 bg-white/80 hover:bg-white dark:bg-zinc-800/80 dark:hover:bg-zinc-800 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 rounded-lg p-2 opacity-0 group-hover:opacity-100 transition-opacity border border-zinc-200/50 dark:border-zinc-700 shadow-sm z-10" aria-label={t('ui.copy_code')}>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
     </button>
-    <button class="run-code-btn absolute bottom-4 right-4 bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 rounded-lg px-4 py-2 opacity-0 group-hover:opacity-100 transition-all shadow-md z-10 text-xs font-semibold uppercase tracking-wider" aria-label="Ejecutar código">▶ Run</button>
-    <div class="overflow-x-auto relative outline-none focus:outline-none" contenteditable="plaintext-only" spellcheck="false" data-code-editor>
-      <div class="dark:hidden"><Code code={code.trim()} lang={lang} theme="vitesse-light" class="!bg-transparent" /></div>
-      <div class="hidden dark:block"><Code code={code.trim()} lang={lang} theme="vitesse-dark" class="!bg-transparent" /></div>
+    <button type="button" class="run-code-btn absolute bottom-4 right-4 bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 rounded-lg px-4 py-2 opacity-0 group-hover:opacity-100 transition-all shadow-md z-10 text-xs font-semibold uppercase tracking-wider" aria-label={t('ui.run_code')}>▶ Run</button>
+    <div class="overflow-x-auto relative outline-none focus:outline-none" contenteditable="plaintext-only" spellcheck="false" role="textbox" aria-multiline="true" aria-label={t('ui.code')} data-code-editor>
+      <div class="dark:hidden" data-code-variant="light"><Code code={code.trim()} lang={lang} theme="vitesse-light" class="!bg-transparent" /></div>
+      <div class="hidden dark:block" data-code-variant="dark"><Code code={code.trim()} lang={lang} theme="vitesse-dark" class="!bg-transparent" /></div>
     </div>
   </div>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  import { readCode } from '../scripts/code-block';
+
+  // astro:page-load, not DOMContentLoaded: with <ViewTransitions /> the latter
+  // only ever fires on the first load, so after navigating between /en and /es
+  // every Preview/Code tab on the page stopped responding to clicks.
+  document.addEventListener('astro:page-load', () => {
     document.querySelectorAll('.preview-block').forEach(block => {
       const btns = block.querySelectorAll('.tab-btn');
       const contents = block.querySelectorAll('.tab-content');
-      
+
       btns.forEach(btn => {
         btn.addEventListener('click', () => {
           btns.forEach(b => {
             b.classList.remove('text-zinc-900', 'border-black', 'dark:text-zinc-100', 'dark:border-white');
             b.classList.add('text-zinc-400', 'border-transparent', 'dark:text-zinc-500');
+            b.setAttribute('aria-selected', 'false');
           });
           contents.forEach(c => c.classList.add('hidden'));
-          
+
           btn.classList.remove('text-zinc-400', 'border-transparent', 'dark:text-zinc-500');
           btn.classList.add('text-zinc-900', 'border-black', 'dark:text-zinc-100', 'dark:border-white');
-          
+          btn.setAttribute('aria-selected', 'true');
+
           const target = btn.getAttribute('data-target');
           block.querySelector(`.tab-content[data-content="${target}"]`)?.classList.remove('hidden');
         });
+      });
+
+      // The copy button used to be an inline onclick reading
+      // `this.nextElementSibling.textContent` — whose next sibling is the Run
+      // button, so it copied the string "▶ Run".
+      block.querySelector('.copy-code-btn')?.addEventListener('click', async () => {
+        const code = readCode(block);
+        if (!code) return;
+        try {
+          await navigator.clipboard.writeText(code);
+        } catch {
+          /* insecure origin or denied permission — nothing useful to do */
+        }
       });
     });
   });

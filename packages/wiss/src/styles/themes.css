@@ -1,5 +1,30 @@
 /* Base global variables for themes.
    Default is the dark theme.
+
+   Three things to know before editing this file:
+
+   1. DARK VARIANTS NEED THE `class` STRATEGY. The `.dark .wiss-theme-*`
+      rules below require an ancestor carrying `.dark` (Tailwind's
+      `darkMode: 'class'`, next-themes, shadcn — all put it on <html>).
+      Projects that rely on `@media (prefers-color-scheme: dark)` instead
+      never match these rules and silently get the light variant. There is
+      no CSS-only fix: a media query can't tell "app uses the media
+      strategy" apart from "app uses the class strategy and is currently in
+      light mode", and guessing would break the second case. If you want
+      this, it has to become an explicit config option.
+
+   2. SOME THEMES NAME WEBFONTS THE LIBRARY DOES NOT SHIP. neon wants
+      Orbitron/Fira Code, brutal wants Inter, pastel wants Jua, pop wants
+      Khand. Each falls back to a system stack, so nothing breaks — but the
+      theme only looks as intended if the host app loads the font itself.
+
+   3. `--wiss-border-radius` IS ONLY READ BY THE ISLAND FORMAT. In the wiss
+      format the corner radius is baked into src/styles/wiss.ts
+      (DEFAULT_ROUNDNESS), because it also drives the gooey filter's blur
+      radius and the whole expand/collapse geometry. So the square-cornered
+      themes (brutal, pop) still render rounded in the wiss format. Fixing
+      that means threading a per-instance radius through wiss.ts and
+      re-checking every formula that reads it.
 */
 :root {
   /* Default text colors */
@@ -33,52 +58,7 @@
 }
 
 /* 
- * 1. GLASS THEME 
- * Translucent frosted glass effect.
- * Wiss format uses --wiss-svg-bg and --wiss-svg-opacity.
- * Island format uses --wiss-bg, backdrop-filter, border, and shadow.
- */
-.wiss-theme-glass {
-  /* For Island format */
-  --wiss-bg: rgba(255, 255, 255, 0.15);
-  --wiss-backdrop-filter: blur(16px);
-  --wiss-border: 1px solid rgba(255, 255, 255, 0.3);
-  --wiss-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
-  
-  /* For Wiss format */
-  --wiss-svg-bg: #d4d4d8;
-  --wiss-svg-opacity: 0.95;
-  
-  --wiss-font-family: 'Outfit', 'Montserrat', system-ui, sans-serif;
-  
-  /* Texto oscuro para contraste en fondos claros */
-  --wiss-text-title: #1f2937;
-  --wiss-text-desc: #374151;
-  
-  --wiss-action-bg: rgba(0, 0, 0, 0.08);
-  --wiss-action-hover-bg: rgba(0, 0, 0, 0.15);
-  --wiss-action-color: #1f2937;
-}
-
-/* Glass on dark backgrounds: white text */
-.dark .wiss-theme-glass {
-  /* For Island format */
-  --wiss-bg: rgba(255, 255, 255, 0.15);
-  --wiss-border: 1px solid rgba(255, 255, 255, 0.15);
-  
-  /* For Wiss format */
-  --wiss-svg-bg: #3f3f46;
-  --wiss-svg-opacity: 0.92;
-  
-  --wiss-text-title: #ffffff;
-  --wiss-text-desc: rgba(255, 255, 255, 0.85);
-  --wiss-action-bg: rgba(255, 255, 255, 0.2);
-  --wiss-action-hover-bg: rgba(255, 255, 255, 0.35);
-  --wiss-action-color: #ffffff;
-}
-
-/* 
- * 2. NEON THEME 
+ * 1. NEON THEME 
  * Cyberpunk inspired, deep black with glowing colors 
  */
 .wiss-theme-neon {
@@ -125,7 +105,7 @@
 }
 
 /* 
- * 3. BRUTAL THEME 
+ * 2. BRUTAL THEME 
  * High contrast, thick borders, neo-brutalism
  */
 .wiss-theme-brutal {
@@ -183,7 +163,7 @@
 }
 
 /* 
- * 4. PASTEL THEME 
+ * 3. PASTEL THEME 
  * Soft, low contrast, friendly colors
  */
 .wiss-theme-pastel {
@@ -243,7 +223,7 @@
 }
 
 /* 
- * 5. LIGHT THEME 
+ * 4. LIGHT THEME 
  * Default light
  */
 .wiss-theme-light {
@@ -271,36 +251,40 @@
 }
 
 /* 
- * 6. SHADCN THEME 
+ * 5. SHADCN THEME 
  * Automatically maps to shadcn/ui CSS variables (Tailwind v4 / oklch / hex)
  */
+/* Every var() carries a fallback: outside a shadcn project (or on an older
+   shadcn that exports loose HSL triplets instead of full colors) these
+   custom properties don't exist, and without a fallback the toast rendered
+   with no background at all. */
 .wiss-theme-shadcn {
-  --wiss-bg: var(--background);
-  --wiss-border: 1px solid var(--border);
-  --wiss-border-hover: 1px solid var(--border);
+  --wiss-bg: var(--background, #ffffff);
+  --wiss-border: 1px solid var(--border, #e4e4e7);
+  --wiss-border-hover: 1px solid var(--border, #d4d4d8);
   --wiss-shadow: 0 4px 12px rgba(0,0,0,0.08);
   --wiss-svg-filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08));
-  
-  --wiss-text-title: var(--foreground);
-  --wiss-text-desc: var(--muted-foreground);
-  
-  --wiss-icon-success: var(--primary);
-  --wiss-icon-error: var(--destructive);
-  --wiss-icon-warning: var(--destructive);
-  --wiss-icon-info: var(--primary);
-  
-  --wiss-title-success: var(--primary);
-  --wiss-title-error: var(--destructive);
-  --wiss-title-warning: var(--destructive);
-  --wiss-title-info: var(--primary);
 
-  --wiss-action-bg: var(--secondary);
-  --wiss-action-color: var(--secondary-foreground);
-  --wiss-action-hover-bg: var(--muted);
+  --wiss-text-title: var(--foreground, #18181b);
+  --wiss-text-desc: var(--muted-foreground, #52525b);
+
+  --wiss-icon-success: var(--primary, #059669);
+  --wiss-icon-error: var(--destructive, #dc2626);
+  --wiss-icon-warning: var(--destructive, #d97706);
+  --wiss-icon-info: var(--primary, #2563eb);
+
+  --wiss-title-success: var(--primary, #059669);
+  --wiss-title-error: var(--destructive, #dc2626);
+  --wiss-title-warning: var(--destructive, #d97706);
+  --wiss-title-info: var(--primary, #2563eb);
+
+  --wiss-action-bg: var(--secondary, rgba(0, 0, 0, 0.05));
+  --wiss-action-color: var(--secondary-foreground, #18181b);
+  --wiss-action-hover-bg: var(--muted, rgba(0, 0, 0, 0.1));
 }
 
 /* 
- * 7. POP THEME 
+ * 6. POP THEME 
  * Comic/neo-brutalism style with hard shadows and vibrant colors
  */
 .wiss-theme-pop {

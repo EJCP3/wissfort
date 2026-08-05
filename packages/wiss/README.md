@@ -3,8 +3,9 @@
 Librería de notificaciones toast **headless** y sin dependencias de runtime. El
 núcleo (`wiss`) es un "cerebro" de TypeScript puro —estado, cola, timers— que
 no sabe nada del DOM ni de ningún framework. La capa visual es intercambiable:
-por defecto trae sus propios temas (**light** y **dark**) o puedes optar
-por heredar el tema de tu proyecto vía **daisyUI** o **shadcn/ui** para que se adapte a tu diseño actual.
+trae seis temas propios (**dark**, **light**, **neon**, **pastel**, **brutal**,
+**pop**) o puedes heredar el tema de tu proyecto con **shadcn/ui**
+(`theme: 'shadcn'`) para que se adapte a tu diseño actual.
 
 
 
@@ -12,6 +13,17 @@ por heredar el tema de tu proyecto vía **daisyUI** o **shadcn/ui** para que se 
 
 ```bash
 pnpm add wissfort
+```
+
+wissfort es **ESM only**: se importa con `import`, no con `require`. Su única
+dependencia de runtime (`cuelume`) también lo es.
+
+El CSS se inyecta solo, no tienes que importar nada. Si prefieres servirlo como
+hoja de estilos —por ejemplo para evitar el flash inicial en SSR, o si tu CSP no
+permite `style-src 'unsafe-inline'`— tienes el bundle completo disponible:
+
+```js
+import 'wissfort/styles.css';
 ```
 
 ## Uso básico (Vanilla JS)
@@ -62,9 +74,27 @@ import { toast } from 'wissfort';
 toast.success('¡Listo!');
 ```
 
-## Temas, daisyUI y shadcn/ui
+## Temas y shadcn/ui
 
-Por defecto, la librería utiliza sus propios temas (**light** y **dark**) construidos con Tailwind. Esto permite que los toasts se vean bien automáticamente.
+`theme` acepta exactamente estos valores (tipo `Theme`, exportado desde `wissfort`):
+
+`'dark'` (por defecto) · `'light'` · `'neon'` · `'pastel'` · `'brutal'` · `'pop'` · `'shadcn'`
+
+Cada uno tiene su regla `.wiss-theme-*` en la hoja de estilos que la librería inyecta sola.
+
+Tres limitaciones conocidas:
+
+- **Las variantes oscuras necesitan la estrategia `class`.** Las reglas
+  `.dark .wiss-theme-*` requieren un ancestro con la clase `.dark` — lo que
+  ponen Tailwind con `darkMode: 'class'`, next-themes y shadcn. Si tu proyecto
+  usa `@media (prefers-color-scheme: dark)`, esas variantes no se activan.
+- **Algunos temas piden fuentes que la librería no incluye**: `neon` usa
+  Orbitron/Fira Code, `brutal` Inter, `pastel` Jua y `pop` Khand. Sin ellas cae
+  a la fuente del sistema y el tema pierde carácter; cárgalas tú si quieres el
+  aspecto original.
+- **`brutal` y `pop` siguen saliendo redondeados en `format="wiss"`.** El radio
+  de ese formato está fijado en el código porque también determina el radio del
+  filtro que fusiona las dos formas SVG. En `format="island"` sí se respeta.
 
 ### Integración con shadcn/ui
 
@@ -81,24 +111,7 @@ toaster({
 ```
 *Nota: Si estás usando una versión más antigua de shadcn donde las variables solo exportan los valores HSL sueltos (ej. `0 0% 100%`), puedes seguir usando `theme: 'light'` o `'dark'` y mapear las variables `--wiss-*` en tu archivo `globals.css` envolviéndolas en la función `hsl()`.*
 
-### Integración con daisyUI
-
-Si prefieres que los toasts hereden el estilo activo de **daisyUI** (claro, oscuro, cyberpunk, etc.), puedes usar `theme: 'daisy'`:
-
-```js
-import { toaster } from 'wissfort/vanilla';
-
-toaster({
-  theme: 'daisy', // 'dark' (default) | 'light' | 'shadcn' | 'daisy'
-  position: 'bottom-right',
-  duration: 4000,
-  offset: 16,
-});
-```
-
-Con `theme: 'daisy'`, wiss inyecta las clases de daisyUI (`alert`, `alert-success`, `alert-error`, ...) en vez de las suyas propias. Así, el color final lo resuelve el tema de daisyUI configurado en tu proyecto.
-
-Si no necesitas integrarlo con daisyUI o prefieres los estilos que trae wiss de base, simplemente no envíes la propiedad `theme` (o usa `'light'`/`'dark'`) y usará el tema predeterminado.
+Si no necesitas integrarlo con shadcn/ui, simplemente no envíes la propiedad `theme` (o usa `'light'`/`'dark'`) y usará el tema predeterminado.
 
 ## Configuración de Tailwind CSS
 
@@ -216,7 +229,27 @@ Estas opciones se pueden pasar como segundo argumento a cualquier método `toast
 | `action` | `{ label, onClick }` | Añade un botón de acción (ej. Deshacer) dentro del toast |
 | `progressBar` | `boolean` | Activa o desactiva la barra de progreso de tiempo animada |
 | `icon` | `string \| HTMLElement \| SVG` | Reemplaza el ícono predeterminado por uno personalizado |
-| `richText` | `boolean` | Permite renderizar el texto como HTML (usa sanitización interna de seguridad) |
+| `dismissOnAction` | `boolean` | Cierra el toast al pulsar el botón de acción (por defecto `true`) |
+| `richText` | `boolean` | Renderiza el mensaje como HTML, pasándolo por el sanitizador interno |
+
+### Qué permite `richText`
+
+Con `richText: true` el mensaje y la descripción pasan por un sanitizador que
+reconstruye el árbol desde cero. El contrato es:
+
+- **Etiquetas permitidas:** `b`, `i`, `strong`, `em`, `u`, `code`, `span`, `br`, `a`.
+  Cualquier otra se descarta conservando su texto.
+- **Atributos permitidos:** `href`, `target`, `rel`, `class`. Todo lo demás
+  —incluidos los `on*`— se elimina.
+- **`style` no está permitido.** Permitirlo dejaba que un mensaje aplicara CSS
+  arbitrario (`position:fixed;inset:0`) y tapara la página entera.
+- **`href` solo acepta** `http:`, `https:`, `mailto:`, `tel:` y URLs relativas.
+  El resto (`javascript:`, `data:`, `blob:`, `vbscript:`) se descarta.
+- **Con `target` se fuerza `rel="noopener noreferrer"`**, aunque el input
+  traiga otro `rel`, para evitar el *reverse tabnabbing*.
+
+`icon` es la excepción deliberada: se inserta como HTML sin sanitizar para que
+puedas pasar un SVG. Trátalo como código tuyo, nunca como dato de usuario.
 
 ## Roadmap
 Fuera de alcance en esta fase, planeado para más adelante:

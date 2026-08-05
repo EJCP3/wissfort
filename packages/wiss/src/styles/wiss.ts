@@ -1,4 +1,5 @@
 import { getConfig } from '../core/config';
+import { dismissToast } from '../core/timers';
 import type { Position, Toast, ToastType } from '../core/types';
 import { getFilterId } from './gooey';
 import { sanitizeHtml } from '../core/sanitize';
@@ -119,11 +120,11 @@ interface WissState {
   actionButton: HTMLButtonElement | null;
 }
 
-// Per-instance mutable state, keyed by the root <button>. render() creates
+// Per-instance mutable state, keyed by the root <div>. render() creates
 // it, update() looks it up.
-const instances = new WeakMap<HTMLButtonElement, WissState>();
+const instances = new WeakMap<HTMLDivElement, WissState>();
 
-function applyCSS(el: HTMLButtonElement, state: WissState): void {
+function applyCSS(el: HTMLDivElement, state: WissState): void {
   const minExpanded = HEIGHT * MIN_EXPAND_RATIO;
   const rawExpanded = state.hasContent
     ? Math.max(minExpanded, HEIGHT + state.contentHeight + CONTENT_PADDING_Y)
@@ -177,7 +178,7 @@ function applyCSS(el: HTMLButtonElement, state: WissState): void {
 
 // Measures the header's real width so the pill hugs its content instead of
 // using a fixed width.
-function measureHeader(el: HTMLButtonElement, state: WissState): void {
+function measureHeader(el: HTMLDivElement, state: WissState): void {
   if (state.headerPad === null || Number.isNaN(state.headerPad)) {
     const cs = getComputedStyle(state.headerDiv);
     const pad = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
@@ -191,7 +192,7 @@ function measureHeader(el: HTMLButtonElement, state: WissState): void {
   }
 }
 
-function setupHeaderObserver(el: HTMLButtonElement, state: WissState): void {
+function setupHeaderObserver(el: HTMLDivElement, state: WissState): void {
   measureHeader(el, state);
   state.headerRO = new ResizeObserver(() => {
     cancelAnimationFrame(state.headerRafId);
@@ -200,7 +201,7 @@ function setupHeaderObserver(el: HTMLButtonElement, state: WissState): void {
   state.headerRO.observe(state.headerInner);
 }
 
-function measureContent(el: HTMLButtonElement, state: WissState): void {
+function measureContent(el: HTMLDivElement, state: WissState): void {
   if (!state.contentDiv) return;
   const h = state.contentDiv.scrollHeight;
   if (h !== state.contentHeight) {
@@ -209,7 +210,7 @@ function measureContent(el: HTMLButtonElement, state: WissState): void {
   }
 }
 
-function setupContentObserver(el: HTMLButtonElement, state: WissState): void {
+function setupContentObserver(el: HTMLDivElement, state: WissState): void {
   if (!state.contentDiv) return;
   measureContent(el, state);
   state.contentRO = new ResizeObserver(() => {
@@ -219,7 +220,7 @@ function setupContentObserver(el: HTMLButtonElement, state: WissState): void {
   state.contentRO.observe(state.contentDiv);
 }
 
-function setExpanded(el: HTMLButtonElement, state: WissState, value: boolean): void {
+function setExpanded(el: HTMLDivElement, state: WissState, value: boolean): void {
   if (state.isExpanded === value) return;
   state.isExpanded = value;
   applyCSS(el, state);
@@ -227,7 +228,7 @@ function setExpanded(el: HTMLButtonElement, state: WissState, value: boolean): v
 
 // mouseenter/mouseleave only — swipe-to-dismiss and header cross-fade are
 // out of scope for this pass.
-function setupEvents(el: HTMLButtonElement, state: WissState): void {
+function setupEvents(el: HTMLDivElement, state: WissState): void {
   el.addEventListener('mouseenter', () => {
     if (state.hasContent) setExpanded(el, state, true);
   });
@@ -239,7 +240,7 @@ function setupEvents(el: HTMLButtonElement, state: WissState): void {
   });
 }
 
-function scheduleAutoExpandCollapse(el: HTMLButtonElement, state: WissState, duration: number): void {
+function scheduleAutoExpandCollapse(el: HTMLDivElement, state: WissState, duration: number): void {
   if (state.autoExpandTimer !== null) {
     clearTimeout(state.autoExpandTimer);
     state.autoExpandTimer = null;
@@ -257,6 +258,7 @@ function scheduleAutoExpandCollapse(el: HTMLButtonElement, state: WissState, dur
 }
 
 function createContentSection(
+  toast: Toast,
   edge: ExpandEdge,
   description: string | HTMLElement,
   action?: { label: string; onClick: () => void },
@@ -294,10 +296,16 @@ function createContentSection(
     actionButton.dataset.cuelumePress = '';
     actionButton.dataset.cuelumeRelease = '';
     actionButton.dataset.cuelumeHover = 'tick';
+    actionButton.type = 'button';
     actionButton.textContent = action.label;
     actionButton.addEventListener('click', (e) => {
       e.stopPropagation();
       action.onClick();
+      // Leaving the toast up after "Undo" reads as a dead button, so it
+      // closes by default — opt out per toast or globally.
+      if (toast.dismissOnAction ?? getConfig().dismissOnAction) {
+        dismissToast(toast.id);
+      }
     });
     contentDiv.append(actionButton);
   }
@@ -314,8 +322,10 @@ export function renderWissToast(toast: Toast): HTMLElement {
   const edge = expandDir(resolvedPosition);
   const minExpanded = HEIGHT * MIN_EXPAND_RATIO;
 
-  const el = document.createElement('button');
-  el.type = 'button';
+  // A <div>, not a <button>: the action button lives inside the toast, and
+  // <button> forbids interactive descendants — an HTML parser would hoist
+  // the action out as a *sibling*, which breaks SSR and any innerHTML pass.
+  const el = document.createElement('div');
   el.dataset.wissId = toast.id;
   el.dataset.wissToast = '';
   el.dataset.ready = 'false';
@@ -324,8 +334,12 @@ export function renderWissToast(toast: Toast): HTMLElement {
   el.dataset.edge = edge;
   el.dataset.position = align;
   el.dataset.state = toast.type;
-  el.setAttribute('role', toast.type === 'error' ? 'alert' : 'status');
-  el.setAttribute('aria-live', toast.type === 'error' ? 'assertive' : 'polite');
+  // The live region is #wiss-toaster (persistent, created before any toast
+  // exists) — see vanilla/index.ts. Only the politeness override rides on
+  // the toast itself, so screen readers interrupt for errors.
+  if (toast.type === 'error') {
+    el.setAttribute('aria-live', 'assertive');
+  }
   el.setAttribute('aria-atomic', 'true');
   el.style.setProperty('--_dur', `${DURATION_MS}ms`);
 
@@ -420,7 +434,7 @@ export function renderWissToast(toast: Toast): HTMLElement {
   let descriptionDiv: HTMLDivElement | null = null;
   let actionButton: HTMLButtonElement | null = null;
   if (hasContent) {
-    const section = createContentSection(edge, toast.description ?? '', toast.action, useRichText);
+    const section = createContentSection(toast, edge, toast.description ?? '', toast.action, useRichText);
     contentDiv = section.contentDiv;
     descriptionDiv = section.descriptionDiv;
     actionButton = section.actionButton;
@@ -476,34 +490,46 @@ export function renderWissToast(toast: Toast): HTMLElement {
 }
 
 export function updateWissToast(el: HTMLElement, toast: Toast): void {
-  const button = el as HTMLButtonElement;
-  const state = instances.get(button);
+  const root = el as HTMLDivElement;
+  const state = instances.get(root);
   if (!state) return;
 
   const changed = state.toastRef !== toast;
   state.toastRef = toast;
 
-  if (!changed) {
-    applyCSS(button, state);
-    return;
-  }
-
   const config = getConfig();
   const resolvedPosition = toast.position ?? config.position;
   const resolvedDuration = toast.duration ?? config.duration;
-  const hasContent = Boolean(toast.description) || Boolean(toast.action);
   const align = pillAlign(resolvedPosition);
   const edge = expandDir(resolvedPosition);
 
-  state.hasContent = hasContent;
+  // Geometry follows the *config*, not the toast, so it has to be applied
+  // even when the toast object is untouched — that's exactly the case when
+  // toaster({ position }) changes while toasts are on screen.
   state.align = align;
   state.edge = edge;
-
-  button.dataset.edge = edge;
-  button.dataset.position = align;
-  button.dataset.state = toast.type;
+  root.dataset.edge = edge;
+  root.dataset.position = align;
   state.canvasDiv.dataset.edge = edge;
   state.headerDiv.dataset.edge = edge;
+  if (state.contentDiv) state.contentDiv.dataset.edge = edge;
+
+  if (!changed) {
+    applyCSS(root, state);
+    return;
+  }
+
+  const hasContent = Boolean(toast.description) || Boolean(toast.action);
+  state.hasContent = hasContent;
+
+  root.dataset.state = toast.type;
+  // A promise toast can turn into an error mid-flight — keep the politeness
+  // override in sync with the type.
+  if (toast.type === 'error') {
+    root.setAttribute('aria-live', 'assertive');
+  } else {
+    root.removeAttribute('aria-live');
+  }
 
   state.badgeDiv.dataset.state = toast.type;
   if (toast.icon) {
@@ -531,12 +557,12 @@ export function updateWissToast(el: HTMLElement, toast: Toast): void {
   }
 
   if (hasContent && !state.contentDiv) {
-    const section = createContentSection(edge, toast.description ?? '', toast.action, useRichText);
+    const section = createContentSection(toast, edge, toast.description ?? '', toast.action, useRichText);
     state.contentDiv = section.contentDiv;
     state.descriptionDiv = section.descriptionDiv;
     state.actionButton = section.actionButton;
-    button.append(section.contentDiv);
-    setupContentObserver(button, state);
+    root.append(section.contentDiv);
+    setupContentObserver(root, state);
   } else if (!hasContent && state.contentDiv) {
     state.contentRO?.disconnect();
     state.contentRO = null;
@@ -562,7 +588,7 @@ export function updateWissToast(el: HTMLElement, toast: Toast): void {
   }
 
   const showProgressBar = toast.progressBar ?? config.progressBar;
-  let progressWrapper = button.querySelector('.wiss-progress-wrapper');
+  let progressWrapper = root.querySelector('.wiss-progress-wrapper');
   
   if (showProgressBar) {
     if (progressWrapper) progressWrapper.remove(); // Force restart
@@ -574,18 +600,40 @@ export function updateWissToast(el: HTMLElement, toast: Toast): void {
     progressBar.style.animationDuration = `${resolvedDuration}ms`;
     
     progressWrapper.append(progressBar);
-    button.append(progressWrapper);
+    root.append(progressWrapper);
   } else if (progressWrapper) {
     progressWrapper.remove();
   }
 
-  applyCSS(button, state);
-  scheduleAutoExpandCollapse(button, state, resolvedDuration);
+  applyCSS(root, state);
+  scheduleAutoExpandCollapse(root, state, resolvedDuration);
+}
+
+/**
+ * Releases everything this toast holds outside its own subtree: pending
+ * timers, queued rAFs and the two ResizeObservers. Must run before the node
+ * is detached — otherwise the observers keep it alive and the auto-expand
+ * timer fires against a node nobody can see.
+ */
+export function disposeWissToast(el: HTMLElement): void {
+  const state = instances.get(el as HTMLDivElement);
+  if (!state) return;
+
+  if (state.autoExpandTimer !== null) {
+    clearTimeout(state.autoExpandTimer);
+    state.autoExpandTimer = null;
+  }
+  cancelAnimationFrame(state.headerRafId);
+  cancelAnimationFrame(state.contentRafId);
+  state.headerRO?.disconnect();
+  state.contentRO?.disconnect();
+  state.headerRO = null;
+  state.contentRO = null;
 }
 
 export function closeWissToast(el: HTMLElement, onComplete: () => void): void {
-  const button = el as HTMLButtonElement;
-  const state = instances.get(button);
+  const root = el as HTMLDivElement;
+  const state = instances.get(root);
   if (!state) {
     onComplete();
     return;
@@ -594,7 +642,7 @@ export function closeWissToast(el: HTMLElement, onComplete: () => void): void {
   if (state.autoExpandTimer) clearTimeout(state.autoExpandTimer);
   
   if (state.isExpanded) {
-    setExpanded(button, state, false);
+    setExpanded(root, state, false);
     setTimeout(onComplete, 600); // Match --_dur transition
   } else {
     onComplete();

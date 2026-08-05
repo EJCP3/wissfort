@@ -2,7 +2,7 @@
   "meta": {
     "title": "wissfort - Una librería de notificaciones con opinión",
     "description": "Librería de notificaciones (toast) sin dependencias que se adapta a tu diseño o te ofrece temas por defecto. Incluye físicas de resorte, sonidos interactivos y una API minimalista."
-  },  
+  },
   "nav": {
     "github": "GitHub",
     "npm": "NPM",
@@ -47,7 +47,6 @@
     "introduccion": {
       "title": "Introducción",
       "p1": "Librería de notificaciones toast headless y sin dependencias de runtime. El núcleo (wiss) es un \"cerebro\" de TypeScript puro —estado, cola, timers— que no sabe nada del DOM ni de ningún framework. La capa visual es intercambiable: por defecto trae sus propios temas (light y dark) o puedes optar por heredar el tema de tu proyecto vía daisyUI o shadcn/ui para que se adapte a tu diseño actual."
-     
     },
     "instalacion": {
       "title": "Instalación"
@@ -180,7 +179,6 @@
       "history_logged": "Historial impreso en consola. Abre DevTools para verlo.",
       "theme_dark": "Tema oscuro activado",
       "theme_light": "Tema claro activado",
-      "theme_glass": "Tema glass activado",
       "theme_neon": "Tema neon activado",
       "theme_pastel": "Tema pastel activado",
       "theme_brutal": "Tema brutal activado",
@@ -192,7 +190,8 @@
       "behavior_normal": "Comportamiento Normal activado (Apilar)",
       "behavior_wiss": "Comportamiento Wiss activado (Reemplazar)",
       "syntax_error": "Error de sintaxis en el código",
-      "prompt_copied": "Prompt para {fw} copiado"
+      "prompt_copied": "Prompt para {fw} copiado",
+      "copy_failed": "No se pudo copiar al portapapeles"
     },
     "sounds": {
       "chime": "Campana suave ascendente de dos notas (Hover por defecto)",
@@ -211,5 +210,18 @@
       "ready": "Tick enfocado con aumento armónico (Contenido cargado)",
       "prefix": "Sonido: {soundName}"
     }
+  },
+  "fab": {
+    "title": "Opciones de Agente IA"
+  },
+  "ui": {
+    "preview": "Vista previa",
+    "code": "Código",
+    "copy_code": "Copiar código",
+    "run_code": "Ejecutar código",
+    "history_show": "Ver historial",
+    "history_hide": "Ocultar historial",
+    "history_empty": "Historial vacío",
+    "history_cleared": "Historial borrado"
   }
 }

@@ -1,17 +1,26 @@
 ---
 import type { Lang } from '../../i18n/utils';
+import { useTranslations } from '../../i18n/utils';
+import { agentDocUrl } from '../../config/site';
 
 interface Props {
   lang: Lang;
 }
 
 const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// Resolved at build time from `Astro.site` so the copied prompt can never
+// point at a host other than the one serving this build.
+const agentDocUrls = Object.fromEntries(
+  ['vanilla', 'react', 'vue', 'svelte'].map((fw) => [fw, agentDocUrl(Astro.site, fw)]),
+);
 ---
 <!-- FAB AI Agents (Vertical Stack) -->
 <div id="fab-container" class="fixed bottom-8 right-8 z-50 flex flex-col items-center gap-4 group">
   
   <!-- Speed Dial Items -->
-  <div class="flex flex-col items-center gap-3 transition-all duration-300 opacity-0 translate-y-8 scale-95 pointer-events-none group-[.is-open]:opacity-100 group-[.is-open]:translate-y-0 group-[.is-open]:scale-100 group-[.is-open]:pointer-events-auto origin-bottom w-14">
+  <div id="fab-items" inert class="flex flex-col items-center gap-3 transition-all duration-300 opacity-0 translate-y-8 scale-95 pointer-events-none group-[.is-open]:opacity-100 group-[.is-open]:translate-y-0 group-[.is-open]:scale-100 group-[.is-open]:pointer-events-auto origin-bottom w-14">
     <button class="agent-fab-btn relative w-10 h-10 bg-white dark:bg-zinc-800 text-orange-500 rounded-full shadow-md flex items-center justify-center hover:bg-zinc-50 dark:hover:bg-zinc-700 border border-zinc-100 dark:border-zinc-700 transition-colors group/btn" data-fw="svelte">
       <span class="text-xs font-bold">Sv</span>
       <span class="absolute right-14 bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 text-sm font-medium px-3 py-1.5 rounded-lg shadow-sm border border-zinc-100 dark:border-zinc-700 whitespace-nowrap opacity-0 group-hover/btn:opacity-100 transition-opacity pointer-events-none">Svelte</span>
@@ -31,7 +40,7 @@ const { lang } = Astro.props;
   </div>
 
   <!-- Main Button -->
-  <button id="fab-main-btn" class="relative z-50 w-14 h-14 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105 active:scale-95 group/main" title="Opciones de Agente IA">
+  <button id="fab-main-btn" type="button" aria-expanded="false" aria-controls="fab-items" class="relative z-50 w-14 h-14 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105 active:scale-95 group/main" title={t('fab.title')} aria-label={t('fab.title')}>
     <!-- Default Icon (Spark) -->
     <svg class="w-6 h-6 transition-all duration-300 absolute group-[.is-open]:scale-0 group-[.is-open]:opacity-0 group-[.is-open]:rotate-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"></path>
@@ -54,16 +63,20 @@ const { lang } = Astro.props;
   </button>
 </div>
 
+<script define:vars={{ agentDocUrls }}>
+  window.__wissAgentDocUrls = agentDocUrls;
+</script>
+
 <script>
   import { toast } from 'wissfort';
 
   document.addEventListener('astro:page-load', () => {
     document.querySelectorAll('.agent-fab-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', async (e) => {
         const fw = (e.currentTarget as HTMLElement).getAttribute('data-fw') || 'vanilla';
-        const prompt = `Read https://wiss-docs.vercel.app/agents/${fw}.md and follow it to install wissfort and add toast notifications to this project.`;
-        navigator.clipboard.writeText(prompt);
-        
+        const docUrl = (window as any).__wissAgentDocUrls?.[fw];
+        const prompt = `Read ${docUrl} and follow it to install wissfort and add toast notifications to this project.`;
+
         const svgs: Record<string, string> = {
           vanilla: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" class="w-5 h-5"><path fill="#F7DF1E" d="M1 1h126v126H1z"/><path fill="#000" d="M85.73 99.31c-2.48-1.52-4.04-3.76-4.71-6.72H68.83c.96 6.8 4.24 12 9.85 15.6 5.61 3.61 12.33 5.41 20.17 5.41 6.8 0 12.65-1.48 17.53-4.44 4.88-2.96 8.52-7.05 10.9-12.25 2.38-5.21 3.56-11.06 3.56-17.55 0-6.17-1.32-11.45-3.96-15.85-2.64-4.4-6.49-7.92-11.53-10.57-5.05-2.64-10.9-4.88-17.55-6.73-4.08-1.12-7.45-2.28-10.1-3.48-2.64-1.2-4.6-2.6-5.88-4.2-1.28-1.6-1.92-3.44-1.92-5.52 0-2.32.72-4.28 2.16-5.88 1.44-1.6 3.4-2.8 5.88-3.6 2.48-.8 5.32-1.2 8.53-1.2 5.04 0 9.13.92 12.25 2.76 3.12 1.84 5.36 4.36 6.72 7.57h11.77c-1.68-6.17-4.96-10.97-9.85-14.41-4.88-3.44-11.61-5.17-20.17-5.17-6.09 0 11.45 1.32 16.09 3.96 4.64 2.64 8.09 6.25 10.33 10.81 2.24 4.56 3.36 9.61 3.36 15.13 0 5.61 1.28 10.41 3.84 14.41s6.16 7.29 10.81 9.85c4.64 2.56 10.17 4.72 16.57 6.49 4.4 1.28 8.01 2.56 10.81 3.84 2.8 1.28 4.92 2.84 6.37 4.68 1.44 1.84 2.16 4.08 2.16 6.73 0 2.88-.76 5.4-2.28 7.57-1.52 2.16-3.8 3.8-6.84 4.92s-6.77 1.68-11.17 1.68c-5.84 0-10.61-1.04-14.33-3.12zM33.6 116.85c-4.24-1.92-7.53-4.84-9.85-8.77H11.5c2.64 7.69 7.37 13.65 14.17 17.89C32.48 130.2 41.53 132.32 52.82 132.32c5.93 0 11.13-.76 15.61-2.28 4.48-1.52 8.13-3.76 10.93-6.72 2.8-2.96 4.88-6.61 6.25-10.93 1.36-4.32 2.04-9.25 2.04-14.77V46.72h-12.25v50.2c0 6.65-1.04 11.85-3.12 15.61-2.08 3.76-5.13 6.45-9.13 8.05-4 1.6-8.89 2.4-14.65 2.4-5.61.03-10.53-.7-14.89-2.13z"/></svg>',
           react: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.2 23 20.4" class="w-5 h-5" fill="#61DAFB"><circle r="2.05"/><g stroke="#61DAFB" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>',
@@ -72,28 +85,55 @@ const { lang } = Astro.props;
         };
 
         const i18n = (window as any).i18nToasts?.actions || {};
+
+        // Await it: clipboard writes reject on an insecure origin or a denied
+        // permission, and the success toast used to fire regardless — telling
+        // the user something was copied when nothing was.
+        try {
+          await navigator.clipboard.writeText(prompt);
+        } catch {
+          toast.error(i18n.copy_failed || 'No se pudo copiar al portapapeles');
+          return;
+        }
+
         const msg = i18n.prompt_copied ? i18n.prompt_copied.replace('{fw}', fw) : `Prompt para ${fw} copiado`;
-        
         toast.success(msg, { icon: svgs[fw] || '🤖', sound: 'success' });
-        
-        // Auto-close FAB
-        document.getElementById('fab-container')?.classList.remove('is-open');
+
+        setFabOpen(false);
       });
     });
 
     const fabContainer = document.getElementById('fab-container');
     const fabMainBtn = document.getElementById('fab-main-btn');
+    const fabItems = document.getElementById('fab-items');
+
+    function setFabOpen(open: boolean) {
+      fabContainer?.classList.toggle('is-open', open);
+      fabMainBtn?.setAttribute('aria-expanded', String(open));
+      // Closed items are only visually hidden (opacity + pointer-events), so
+      // without `inert` they stayed tabbable and readable by screen readers.
+      if (fabItems) fabItems.toggleAttribute('inert', !open);
+    }
+
     if (fabContainer && fabMainBtn) {
+      setFabOpen(false);
+
       fabMainBtn.addEventListener('click', () => {
-        fabContainer.classList.toggle('is-open');
+        setFabOpen(!fabContainer.classList.contains('is-open'));
       });
 
-      // Close when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!fabContainer.contains(e.target as Node)) {
-          fabContainer.classList.remove('is-open');
-        }
-      });
+      // Bound to `document`, so it must be torn down before the next page
+      // swap — re-running this block on every astro:page-load otherwise piles
+      // up one anonymous listener per navigation, forever.
+      const onDocumentClick = (e: MouseEvent) => {
+        if (!fabContainer.contains(e.target as Node)) setFabOpen(false);
+      };
+      document.addEventListener('click', onDocumentClick);
+      document.addEventListener(
+        'astro:before-swap',
+        () => document.removeEventListener('click', onDocumentClick),
+        { once: true },
+      );
     }
   });
 </script>

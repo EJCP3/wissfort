@@ -44,8 +44,25 @@ function addToHistory(toast: Toast, config: { maxHistory: number, enableHistory:
   notifyHistory();
 }
 
+let idCounter = 0;
+
+/**
+ * Toast ids are DOM reconciliation keys, not secrets — uniqueness within the
+ * page is all they need. `crypto.randomUUID` is unavailable in insecure
+ * contexts (plain http, e.g. testing from a phone on the LAN) and in Safari
+ * below 15.4, where it used to throw on every single toast.
+ */
+function createId(): string {
+  const c: Crypto | undefined = globalThis.crypto;
+  if (typeof c?.randomUUID === 'function') {
+    return c.randomUUID();
+  }
+  idCounter += 1;
+  return `wiss-${Date.now().toString(36)}-${idCounter.toString(36)}`;
+}
+
 export function addToast(message: string | HTMLElement, type: ToastType, options: ToastOptions = {}): string {
-  const id = options.id ?? crypto.randomUUID();
+  const id = options.id ?? createId();
 
   const toast: Toast = {
     id,
@@ -56,6 +73,7 @@ export function addToast(message: string | HTMLElement, type: ToastType, options
     ...(options.duration !== undefined ? { duration: options.duration } : {}),
     ...(options.position !== undefined ? { position: options.position } : {}),
     ...(options.action !== undefined ? { action: options.action } : {}),
+    ...(options.dismissOnAction !== undefined ? { dismissOnAction: options.dismissOnAction } : {}),
     ...(options.progressBar !== undefined ? { progressBar: options.progressBar } : {}),
     ...(options.icon !== undefined ? { icon: options.icon } : {}),
     ...(options.richText !== undefined ? { richText: options.richText } : {}),
@@ -83,6 +101,10 @@ export function addToast(message: string | HTMLElement, type: ToastType, options
 
   notify();
   return id;
+}
+
+export function getToast(id: string): Toast | undefined {
+  return toasts.find((t) => t.id === id);
 }
 
 export function removeToast(id: string): void {

@@ -1,6 +1,7 @@
 ---
 import type { Lang } from '../../i18n/utils';
 import { useTranslations } from '../../i18n/utils';
+import { GITHUB_URL, NPM_URL } from '../../config/site';
 
 interface Props {
   lang: Lang;
@@ -13,26 +14,26 @@ const t = useTranslations(lang);
 <nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-8 py-4 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md transition-colors duration-300">
   <div class="font-bold text-lg tracking-tight"><span id="nav-text" class="text-zinc-900 dark:text-zinc-100 transition-colors duration-300">wissfort</span><span id="nav-dot" class="text-zinc-300 transition-colors duration-300">.</span></div>
   <div class="flex items-center gap-4 md:gap-6 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-    <a href="https://github.com/EJCP3/wissfort" target="_blank" rel="noopener noreferrer" class="hidden md:inline-block hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">{t('nav.github')}</a>
-    <a href="https://www.npmjs.com/package/wissfort" target="_blank" rel="noopener noreferrer" class="hidden md:inline-block hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">{t('nav.npm')}</a>
+    <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" class="hidden md:inline-block hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">{t('nav.github')}</a>
+    <a href={NPM_URL} target="_blank" rel="noopener noreferrer" class="hidden md:inline-block hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">{t('nav.npm')}</a>
     <a href="#docs" class="hidden md:inline-block hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors">{t('nav.docs')}</a>
 
     <div class="hidden md:block w-px h-4 bg-zinc-300 dark:bg-zinc-700"></div>
     
-    <button id="lang-toggle" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors font-medium">{t('nav.lang_toggle')}</button>
+    <button id="lang-toggle" type="button" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors font-medium">{t('nav.lang_toggle')}</button>
     
-    <button id="theme-toggle" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors flex items-center" title={t('nav.theme_toggle_tooltip')}>
+    <button id="theme-toggle" type="button" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors flex items-center" title={t('nav.theme_toggle_tooltip')}>
       <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
       </svg>
     </button>
 
-    <button id="format-toggle" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors font-mono text-xs bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-zinc-700" title={t('nav.format_toggle_tooltip')}>
+    <button id="format-toggle" type="button" class="hover:text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-100 transition-colors font-mono text-xs bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-zinc-700" title={t('nav.format_toggle_tooltip')}>
       wiss
     </button>
 
     <!-- Mobile Menu Toggle -->
-    <button id="mobile-menu-toggle" class="md:hidden flex flex-col justify-center gap-[5px] w-6 h-6 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors z-50 ml-1" aria-label="Menu">
+    <button id="mobile-menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden flex flex-col justify-center gap-[5px] w-6 h-6 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors z-50 ml-1" aria-label="Menu">
       <span class="w-full h-[2px] bg-current rounded-full transition-all duration-300 origin-center"></span>
       <span class="w-full h-[2px] bg-current rounded-full transition-all duration-300"></span>
       <span class="w-full h-[2px] bg-current rounded-full transition-all duration-300 origin-center"></span>
@@ -41,9 +42,9 @@ const t = useTranslations(lang);
 </nav>
 
 <!-- Mobile Menu Drawer -->
-<div id="mobile-menu" class="fixed inset-0 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-all duration-300">
-  <a href="https://github.com/EJCP3/wissfort" target="_blank" rel="noopener noreferrer" class="mobile-link text-2xl font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">{t('nav.github')}</a>
-  <a href="https://www.npmjs.com/package/wissfort" target="_blank" rel="noopener noreferrer" class="mobile-link text-2xl font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">{t('nav.npm')}</a>
+<div id="mobile-menu" inert class="fixed inset-0 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-all duration-300">
+  <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" class="mobile-link text-2xl font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">{t('nav.github')}</a>
+  <a href={NPM_URL} target="_blank" rel="noopener noreferrer" class="mobile-link text-2xl font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">{t('nav.npm')}</a>
   <a href="#docs" class="mobile-link text-2xl font-bold text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">{t('nav.docs')}</a>
 </div>
 
@@ -51,6 +52,7 @@ const t = useTranslations(lang);
   import { toaster } from 'wissfort/vanilla';
   import { toast } from 'wissfort';
   import { navigate } from 'astro:transitions/client';
+  import { docsToasterState, FORMAT_FONTS } from '../../scripts/toaster-state';
   
   document.addEventListener('astro:page-load', () => {
     // Mobile Menu
@@ -62,6 +64,11 @@ const t = useTranslations(lang);
     let menuOpen = false;
     const toggleMenu = () => {
       menuOpen = !menuOpen;
+      mobileToggle?.setAttribute('aria-expanded', String(menuOpen));
+      // The drawer is only visually hidden (opacity + pointer-events), so
+      // without `inert` its three links stayed tabbable and were announced by
+      // screen readers while the menu was closed.
+      mobileMenu?.toggleAttribute('inert', !menuOpen);
       if (menuOpen) {
         mobileMenu?.classList.remove('opacity-0', 'pointer-events-none');
         mobileMenu?.classList.add('opacity-100', 'pointer-events-auto');
@@ -94,7 +101,8 @@ const t = useTranslations(lang);
       document.documentElement.classList.toggle('dark');
       const darkActive = document.documentElement.classList.contains('dark');
       localStorage.theme = darkActive ? 'dark' : 'light';
-      toaster({ theme: darkActive ? 'dark' : 'light' });
+      docsToasterState.theme = darkActive ? 'dark' : 'light';
+      toaster({ theme: docsToasterState.theme });
       
       const i18n = (window as any).i18nToasts;
       if (i18n) {
@@ -104,14 +112,16 @@ const t = useTranslations(lang);
       }
     });
 
-    let currentFormat = 'wiss';
     const formatToggle = document.getElementById('format-toggle');
     if (formatToggle) {
-      formatToggle.textContent = 'wiss';
+      // Read from the shared module, not a local `let`: this handler re-runs
+      // on every navigation, so a local variable reset to 'wiss' while the
+      // library kept rendering the format you had actually chosen.
+      formatToggle.textContent = docsToasterState.format;
       formatToggle.addEventListener('click', (e) => {
-        currentFormat = currentFormat === 'wiss' ? 'island' : 'wiss';
-        const font = currentFormat === 'wiss' ? '"IBM Plex Mono", monospace' : '"IBM Plex Sans", sans-serif';
-        toaster({ format: currentFormat as any, fontFamily: font });
+        const currentFormat = docsToasterState.format === 'wiss' ? 'island' : 'wiss';
+        docsToasterState.format = currentFormat;
+        toaster({ format: currentFormat, fontFamily: FORMAT_FONTS[currentFormat] });
         if (e.currentTarget) (e.currentTarget as HTMLElement).textContent = currentFormat;
         
         const heroText = document.getElementById('hero-text');

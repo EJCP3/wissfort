@@ -1,6 +1,6 @@
 {
   "name": "wissfort",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Librería de notificaciones toast minimalista, personalizable y bonita",
   "keywords": [
     "toast",
@@ -15,41 +15,44 @@
     "type": "git",
     "url": "https://github.com/EJCP3/wiss.git"
   },
-  "homepage": "https://wiss-docs.vercel.app/",
+  "homepage": "https://wissfort.vercel.app",
   "type": "module",
+  "types": "./dist/core/index.d.ts",
+  "module": "./dist/core.es.js",
   "exports": {
     ".": {
-      "import": "./dist/core.es.js",
-      "require": "./dist/core.cjs.js",
-      "types": "./dist/core/index.d.ts"
+      "types": "./dist/core/index.d.ts",
+      "import": "./dist/core.es.js"
     },
     "./vanilla": {
-      "import": "./dist/vanilla.es.js",
-      "require": "./dist/vanilla.cjs.js",
-      "types": "./dist/vanilla/index.d.ts"
+      "types": "./dist/vanilla/index.d.ts",
+      "import": "./dist/vanilla.es.js"
     },
     "./island": {
-      "import": "./dist/island.es.js",
-      "require": "./dist/island.cjs.js",
-      "types": "./dist/styles/island.d.ts"
+      "types": "./dist/styles/island.d.ts",
+      "import": "./dist/island.es.js"
     },
-    "./styles.css": "./dist/styles.css",
     "./react": {
-      "import": "./dist/react.es.js",
-      "require": "./dist/react.cjs.js",
-      "types": "./dist/react/index.d.ts"
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react.es.js"
     },
     "./vue": {
-      "import": "./dist/vue.es.js",
-      "require": "./dist/vue.cjs.js",
-      "types": "./dist/vue/index.d.ts"
+      "types": "./dist/vue/index.d.ts",
+      "import": "./dist/vue.es.js"
     },
     "./svelte": {
-      "import": "./dist/svelte.es.js",
-      "require": "./dist/svelte.cjs.js",
-      "types": "./dist/svelte/index.d.ts"
-    }
+      "types": "./dist/svelte/index.d.ts",
+      "import": "./dist/svelte.es.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
   },
+  "sideEffects": [
+    "**/*.css",
+    "./dist/vanilla.es.js",
+    "./dist/island.es.js",
+    "./dist/styles/*"
+  ],
   "files": [
     "dist"
   ],
@@ -57,6 +60,7 @@
     "build": "vite build",
     "dev": "vite build --watch",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node test/smoke.mjs && node test/pause.mjs && node test/update.mjs && node test/container.mjs && node test/sanitize.mjs && node test/hotconfig.mjs && node test/packaging.mjs",
     "playground": "vite --open /playground/sileo-test.html"
   },
   "peerDependencies": {

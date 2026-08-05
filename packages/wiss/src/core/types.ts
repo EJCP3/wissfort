@@ -8,6 +8,19 @@ export type Position =
   | 'bottom-center'
   | 'bottom-right';
 
+/**
+ * Every theme that ships with a `.wiss-theme-*` rule in styles/themes.css.
+ * `dark` is the default and lives on `:root`, so it has no class of its own.
+ */
+export type Theme =
+  | 'dark'
+  | 'light'
+  | 'neon'
+  | 'pastel'
+  | 'brutal'
+  | 'pop'
+  | 'shadcn';
+
 export interface ToastAction {
   label: string;
   onClick: () => void;
@@ -21,6 +34,8 @@ export interface Toast {
   duration?: number;
   position?: Position;
   action?: ToastAction;
+  /** Dismiss the toast right after `action.onClick` runs. Defaults to `true`. */
+  dismissOnAction?: boolean;
   progressBar?: boolean;
   icon?: string | HTMLElement | SVGSVGElement;
   richText?: boolean;
@@ -34,6 +49,8 @@ export interface ToastOptions {
   position?: Position;
   id?: string;
   action?: ToastAction;
+  /** Dismiss the toast right after `action.onClick` runs. Defaults to `true`. */
+  dismissOnAction?: boolean;
   progressBar?: boolean;
   icon?: string | HTMLElement | SVGSVGElement;
   richText?: boolean;
@@ -44,7 +61,7 @@ export interface ToastOptions {
 export interface WissConfig {
   position?: Position;
   duration?: number;
-  theme?: string;
+  theme?: Theme;
   format?: 'wiss' | 'island';
   offset?: number;
   progressBar?: boolean;
@@ -55,6 +72,8 @@ export interface WissConfig {
   fontFamily?: string;
   richText?: boolean;
   sound?: boolean;
+  /** Default for `ToastOptions.dismissOnAction`. Defaults to `true`. */
+  dismissOnAction?: boolean;
 }
 
 export interface PromiseToastOptions<T = any> {

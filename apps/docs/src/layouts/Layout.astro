@@ -27,20 +27,23 @@ const ogImage = lang === 'es' ? '/es-image.png' : '/en-image.png';
     <ViewTransitions />
     <script is:inline>
       if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark')
+        document.documentElement.classList.add('dark') 
       } else {
         document.documentElement.classList.remove('dark')
       }
     </script>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    
+
     <!-- Meta -->
     <title>{finalTitle}</title>
     <meta name="title" content={finalTitle} />
     <meta name="description" content={finalDescription} />
+    <link rel="canonical" href={canonicalURL.toString()} />
+    <link rel="alternate" hreflang="en" href={new URL('/', canonicalURL).toString()} />
+    <link rel="alternate" hreflang="es" href={new URL('/es/', canonicalURL).toString()} />
+    <link rel="alternate" hreflang="x-default" href={new URL('/', canonicalURL).toString()} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />

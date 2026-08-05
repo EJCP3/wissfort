@@ -8,6 +8,15 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 let hostSvg: SVGSVGElement | null = null;
 const cache = new Map<number, string>();
 
+/** The shared hidden <defs> every wiss filter is registered in. */
+export function ensureFilterDefs(): SVGDefsElement {
+  const defs = ensureHost().querySelector('defs');
+  if (!defs) {
+    throw new Error('wiss: filter host is missing its <defs>');
+  }
+  return defs as SVGDefsElement;
+}
+
 function ensureHost(): SVGSVGElement {
   if (hostSvg) return hostSvg;
   hostSvg = document.createElementNS(SVG_NS, 'svg');

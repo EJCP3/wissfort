@@ -1,9 +1,9 @@
-import type { Position, WissConfig } from './types';
+import type { Position, Theme, WissConfig } from './types';
 
 export interface ResolvedConfig {
   position: Position;
   duration: number;
-  theme: string;
+  theme: Theme;
   format: 'wiss' | 'island';
   offset: number;
   progressBar: boolean;
@@ -14,6 +14,7 @@ export interface ResolvedConfig {
   fontFamily?: string;
   richText: boolean;
   sound: boolean;
+  dismissOnAction: boolean;
 }
 
 const defaultConfig: ResolvedConfig = {
@@ -29,6 +30,7 @@ const defaultConfig: ResolvedConfig = {
   replaceBehavior: 'normal',
   richText: false,
   sound: true,
+  dismissOnAction: true,
 };
 
 let config: ResolvedConfig = { ...defaultConfig };
@@ -51,6 +53,7 @@ export function setConfig(next: WissConfig): void {
     replaceBehavior: next.replaceBehavior ?? config.replaceBehavior,
     richText: next.richText ?? config.richText,
     sound: next.sound ?? config.sound,
+    dismissOnAction: next.dismissOnAction ?? config.dismissOnAction,
   };
   
   const resolvedFont = next.fontFamily ?? config.fontFamily;

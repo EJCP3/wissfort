@@ -11,6 +11,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const interactiveToasts = getTranslations(lang, 'interactive_toasts');
+const uiStrings = getTranslations(lang, 'ui');
 ---
 <article class="flex-1 min-w-0 w-full max-w-2xl prose prose-zinc prose-a:text-zinc-900 dark:text-zinc-100 pb-32">
   <h2 id="introduccion" class="text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">{t('content.introduccion.title')}</h2>
@@ -45,7 +46,7 @@ const interactiveToasts = getTranslations(lang, 'interactive_toasts');
   <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.sonido_interacciones.catalogo_title')}</h3>
   <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-6">{t('content.sonido_interacciones.catalogo_desc')}</p>
 
-  <PreviewBlock id="sound-catalog" lang="js" code={`import { toast } from 'wissfort';\n\n// Prueba cualquier sonido personalizado\ntoast.info('Chime sonando', { sound: 'chime' });\ntoast.info('Mensaje discreto', { sound: 'whisper' });\ntoast.info('Error mecánico', { sound: 'toggle' });`}>
+  <PreviewBlock uiLang={lang} id="sound-catalog" lang="js" code={`import { toast } from 'wissfort';\n\n// Prueba cualquier sonido personalizado\ntoast.info('Chime sonando', { sound: 'chime' });\ntoast.info('Mensaje discreto', { sound: 'whisper' });\ntoast.info('Error mecánico', { sound: 'toggle' });`}>
     <div slot="preview" class="flex flex-wrap justify-center gap-2 px-4 max-w-2xl mx-auto">
       <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="chime">chime</button>
       <button class="sound-demo-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-600 dark:text-zinc-300 transition-colors" data-sound="sparkle">sparkle</button>
@@ -68,27 +69,27 @@ const interactiveToasts = getTranslations(lang, 'interactive_toasts');
   <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6" set:html={t('content.uso_basico.desc_html')} />
   
   <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.uso_basico.simples_title')}</h3>
-  <PreviewBlock id="toast-simple" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.success('Usuario creado');\ntoast.error('Algo salió mal');\ntoast.warning('Revisa este campo');\ntoast.info('Nueva actualización disponible');`}>
+  <PreviewBlock uiLang={lang} id="toast-simple" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.success('Usuario creado');\ntoast.error('Algo salió mal');\ntoast.warning('Revisa este campo');\ntoast.info('Nueva actualización disponible');`}>
     <div slot="preview" class="flex flex-wrap justify-center gap-3">
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Success</button>
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Error</button>
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Warning</button>
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Info</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="success">Success</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="error">Error</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="warning">Warning</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="info">Info</button>
     </div>
   </PreviewBlock>
   <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-4 text-center">{t('content.uso_basico.simples_tip')}</p>
 
   <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.uso_basico.action_title')}</h3>
-  <PreviewBlock id="toast-action" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.show('Elemento eliminado', { \n  action: { \n    label: 'Deshacer', \n    onClick: () => toast.success('Acción deshecha correctamente') \n  } \n});`}>
+  <PreviewBlock uiLang={lang} id="toast-action" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.show('Elemento eliminado', { \n  action: { \n    label: 'Deshacer', \n    onClick: () => toast.success('Acción deshecha correctamente') \n  } \n});`}>
     <div slot="preview" class="flex justify-center">
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Action</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="action">Action</button>
     </div>
   </PreviewBlock>
 
   <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.uso_basico.promise_title')}</h3>
-  <PreviewBlock id="toast-promise" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.promise(\n  fetch('/api/users'),\n  {\n    loading: 'Cargando usuarios...',\n    success: 'Usuarios cargados correctamente',\n    error: 'Error al cargar usuarios',\n  }\n);`}>
+  <PreviewBlock uiLang={lang} id="toast-promise" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.promise(\n  fetch('/api/users'),\n  {\n    loading: 'Cargando usuarios...',\n    success: 'Usuarios cargados correctamente',\n    error: 'Error al cargar usuarios',\n  }\n);`}>
     <div slot="preview" class="flex justify-center">
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Promise</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="promise">Promise</button>
     </div>
   </PreviewBlock>
 
@@ -96,14 +97,14 @@ const interactiveToasts = getTranslations(lang, 'interactive_toasts');
   <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">{t('content.opciones.desc')}</p>
 
   <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.opciones.desc_title')}</h3>
-  <PreviewBlock id="toast-description" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.success('¡Archivo guardado!', {\n  description: 'El archivo se guardó correctamente en tu carpeta local.'\n});`}>
+  <PreviewBlock uiLang={lang} id="toast-description" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.success('¡Archivo guardado!', {\n  description: 'El archivo se guardó correctamente en tu carpeta local.'\n});`}>
     <div slot="preview" class="flex justify-center">
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Description</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="description">Description</button>
     </div>
   </PreviewBlock>
 
   <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.opciones.icon_title')}</h3>
-  <PreviewBlock id="toast-icon" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.info('Nueva actualización', {\n  icon: '🚀' // Puedes pasar un string, HTML o SVG\n});`}>
+  <PreviewBlock uiLang={lang} id="toast-icon" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.info('Nueva actualización', {\n  icon: '🚀' // Puedes pasar un string, HTML o SVG\n});`}>
     <div slot="preview" class="flex flex-col items-center gap-4 w-full">
       <button class="run-code-btn px-6 py-2.5 bg-black text-white dark:bg-white dark:text-black hover:scale-105 rounded-xl text-sm font-medium transition-all shadow-lg">{t('content.opciones.icon_run_code')}</button>
       <div class="text-sm text-zinc-500 flex flex-col gap-2 items-center justify-center">
@@ -124,19 +125,19 @@ const interactiveToasts = getTranslations(lang, 'interactive_toasts');
   </PreviewBlock>
 
   <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.opciones.progress_title')}</h3>
-  <PreviewBlock id="toast-progress" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.info('Descargando archivo...', {\n  duration: 5000,\n  progressBar: true\n});`}>
+  <PreviewBlock uiLang={lang} id="toast-progress" lang="js" code={`import { toast } from 'wissfort';\n\ntoast.info('Descargando archivo...', {\n  duration: 5000,\n  progressBar: true\n});`}>
     <div slot="preview" class="flex justify-center">
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Progress</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="progress">Progress</button>
     </div>
   </PreviewBlock>
 
   <h2 id="historial" class="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 mt-12">{t('content.historial.title')}</h2>
   <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6">{t('content.historial.desc')}</p>
-  <PreviewBlock id="toast-history" lang="js" code={`import { toast } from 'wissfort';\n\nconst historial = toast.history();\nconsole.log(historial); // Array con los toasts anteriores\n\n// Para limpiar el historial:\n// toast.clearHistory();`}>
+  <PreviewBlock uiLang={lang} id="toast-history" lang="js" code={`import { toast } from 'wissfort';\n\nconst historial = toast.history();\nconsole.log(historial); // Array con los toasts anteriores\n\n// Para limpiar el historial:\n// toast.clearHistory();`}>
     <div slot="preview" class="flex flex-col items-center w-full px-4 max-w-sm mx-auto">
       <div class="flex gap-3 mb-4">
-        <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Show History</button>
-        <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Clear History</button>
+        <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="show history">Show History</button>
+        <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="clear history">Clear History</button>
       </div>
       <div id="history-output" class="w-full flex flex-col gap-2 empty:hidden max-h-64 overflow-y-auto pr-2 custom-scrollbar hidden"></div>
     </div>
@@ -146,41 +147,40 @@ const interactiveToasts = getTranslations(lang, 'interactive_toasts');
   <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-6" set:html={t('content.configuracion_global.desc_html')} />
 
   <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.configuracion_global.tema_title')}</h3>
-  <PreviewBlock id="toast-theme" lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\n// Cambia globalmente el tema visual\ntoaster({ theme: 'glass' }); // 'light' | 'dark' | 'glass' | 'neon' | 'pastel' | 'brutal' | 'pop'`}>
+  <PreviewBlock uiLang={lang} id="toast-theme" lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\n// Cambia globalmente el tema visual\ntoaster({ theme: 'neon' }); // 'light' | 'dark' | 'neon' | 'pastel' | 'brutal' | 'pop' | 'shadcn'`}>
     <div slot="preview" class="flex flex-wrap justify-center gap-3 max-w-lg mx-auto">
-      <button class="toast-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Dark Theme</button>
-      <button class="toast-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Light Theme</button>
-      <button class="toast-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Glass Theme</button>
-      <button class="toast-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Neon Theme</button>
-      <button class="toast-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Pastel Theme</button>
-      <button class="toast-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Brutal Theme</button>
-      <button class="toast-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Pop Theme</button>
+      <button class="toast-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="dark theme">Dark Theme</button>
+      <button class="toast-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="light theme">Light Theme</button>
+      <button class="toast-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="neon theme">Neon Theme</button>
+      <button class="toast-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="pastel theme">Pastel Theme</button>
+      <button class="toast-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="brutal theme">Brutal Theme</button>
+      <button class="toast-btn px-4 py-2 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="pop theme">Pop Theme</button>
     </div>
   </PreviewBlock>
 
   <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.configuracion_global.formato_title')}</h3>
   <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">{t('content.configuracion_global.formato_desc')}</p>
-  <PreviewBlock id="toast-format" lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\n// wiss: Bordes definidos\n// island: Diseño más suave e integrado\ntoaster({ format: 'island' });`}>
+  <PreviewBlock uiLang={lang} id="toast-format" lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\n// wiss: Bordes definidos\n// island: Diseño más suave e integrado\ntoaster({ format: 'island' });`}>
     <div slot="preview" class="flex justify-center gap-3">
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Wiss Format</button>
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Island Format</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="wiss format">Wiss Format</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="island format">Island Format</button>
     </div>
   </PreviewBlock>
 
   <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.configuracion_global.limite_title')}</h3>
-  <PreviewBlock id="toast-limit" lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\n// Máximo de toasts visibles al mismo tiempo\ntoaster({ maxToasts: 2 });`}>
+  <PreviewBlock uiLang={lang} id="toast-limit" lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\n// Máximo de toasts visibles al mismo tiempo\ntoaster({ maxToasts: 2 });`}>
     <div slot="preview" class="flex justify-center gap-3">
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Limit 2</button>
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Limit 5</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="limit 2">Limit 2</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="limit 5">Limit 5</button>
     </div>
   </PreviewBlock>
 
   <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4 mt-8">{t('content.configuracion_global.behavior_title')}</h3>
   <p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4" set:html={t('content.configuracion_global.behavior_desc_html')} />
-  <PreviewBlock id="toast-behavior" lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\ntoaster({ replaceBehavior: 'wiss' }); // 'normal' | 'wiss'`}>
+  <PreviewBlock uiLang={lang} id="toast-behavior" lang="js" code={`import { toaster } from 'wissfort/vanilla';\n\ntoaster({ replaceBehavior: 'wiss' }); // 'normal' | 'wiss'`}>
     <div slot="preview" class="flex justify-center gap-3">
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Behavior Normal</button>
-      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors">Behavior Wiss</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="behavior normal">Behavior Normal</button>
+      <button class="toast-btn px-5 py-2.5 bg-[#f6f6f7] hover:bg-[#ececed] dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded-xl text-sm font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300 transition-colors" data-toast-demo="behavior wiss">Behavior Wiss</button>
     </div>
   </PreviewBlock>
 
@@ -242,15 +242,29 @@ const interactiveToasts = getTranslations(lang, 'interactive_toasts');
   </ul>
 </article>
 
-<script is:inline define:vars={{ interactiveToasts }}>
+<script is:inline define:vars={{ interactiveToasts, uiStrings }}>
   window.i18nToasts = interactiveToasts;
+  window.i18nUi = uiStrings;
 </script>
 
 <script>
   import { toast, subscribeHistory } from 'wissfort';
   import { toaster } from 'wissfort/vanilla';
+  import { readCode, writeCode } from '../../scripts/code-block';
+
+  // Module scope, so it survives across astro:page-load runs and can be torn
+  // down on swap. It used to live on `window` and was never released on
+  // navigation, leaving the subscription writing into a detached node.
+  let historyUnsub: (() => void) | undefined;
+  const stopHistory = () => {
+    historyUnsub?.();
+    historyUnsub = undefined;
+  };
+  document.addEventListener('astro:before-swap', stopHistory);
 
   document.addEventListener('astro:page-load', () => {
+    const i18nUi = (window as any).i18nUi || {};
+
     const updateHeroDot = (theme: string) => {
       const heroDot = document.getElementById('hero-dot');
       const navDot = document.getElementById('nav-dot');
@@ -265,7 +279,6 @@ const interactiveToasts = getTranslations(lang, 'interactive_toasts');
         switch (theme) {
           case 'dark': text.classList.add('text-zinc-100'); break;
           case 'light': text.classList.add('text-zinc-900'); break;
-          case 'glass': text.classList.add('text-sky-400'); break;
           case 'neon': text.classList.add('text-fuchsia-500'); break;
           case 'pastel': text.classList.add('text-pink-400'); break;
           case 'brutal': text.classList.add('text-yellow-500'); break;
@@ -279,7 +292,6 @@ const interactiveToasts = getTranslations(lang, 'interactive_toasts');
         switch (theme) {
           case 'dark': dot.classList.add('text-zinc-100'); break;
           case 'light': dot.classList.add('text-zinc-900'); break;
-          case 'glass': dot.classList.add('text-sky-400'); break;
           case 'neon': dot.classList.add('text-fuchsia-500'); break;
           case 'pastel': dot.classList.add('text-pink-400'); break;
           case 'brutal': dot.classList.add('text-yellow-500'); break;
@@ -309,30 +321,22 @@ const interactiveToasts = getTranslations(lang, 'interactive_toasts');
       btn.addEventListener('click', (e) => {
         const block = (e.currentTarget as HTMLElement).closest('.preview-block');
         if (!block) return;
-        const codeEl = block.querySelector('[data-code-editor]');
-        if (!codeEl) return;
-        
+
         const newIcon = (e.currentTarget as HTMLElement).getAttribute('data-icon');
-        
-        let rawCode = '';
-        const divs = codeEl.querySelectorAll(':scope > div');
-        if (divs.length > 0) {
-           const visibleDiv = Array.from(divs).find(d => getComputedStyle(d).display !== 'none') || divs[0];
-           rawCode = visibleDiv.textContent || '';
-        } else {
-           rawCode = codeEl.textContent || '';
-        }
-        
-        let text = rawCode.replace(/icon:\s*(['"`])([\s\S]*?)\1/, `icon: $1${newIcon}$1`);
-        codeEl.textContent = text;
-        
+        const next = readCode(block).replace(/icon:\s*(['"`])([\s\S]*?)\1/, `icon: $1${newIcon}$1`);
+        writeCode(block, next);
+
         (block.querySelector('.run-code-btn') as HTMLElement)?.click();
       });
     });
 
     document.querySelectorAll('.toast-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const type = (e.target as HTMLElement).textContent?.toLowerCase().trim();
+        // Keyed on data-toast-demo, not on the button's visible text. The old
+        // version switched on textContent, which meant (a) the labels could
+        // never be translated without silently breaking every demo, and
+        // (b) the history button broke itself by rewriting its own label.
+        const type = (e.currentTarget as HTMLElement).dataset.toastDemo;
         const i18n = (window as any).i18nToasts?.actions || {};
         
         switch(type) {
@@ -342,7 +346,7 @@ const interactiveToasts = getTranslations(lang, 'interactive_toasts');
           case 'info': 
           case 'action': 
           case 'promise': 
-            if (!(e.target as HTMLElement).closest('#playground')) {
+            if (!(e.currentTarget as HTMLElement).closest('#playground')) {
                if (type === 'success') toast.success(i18n.success || 'Success');
                if (type === 'error') toast.error(i18n.error_missing_fields || 'Error');
                if (type === 'warning') toast.warning(i18n.warning_session || 'Warning');
@@ -366,48 +370,65 @@ const interactiveToasts = getTranslations(lang, 'interactive_toasts');
           case 'progress': toast.info(i18n.progress_title, { duration: 5000, progressBar: true }); break;
           case 'show history': 
           case 'hide history': {
-            const output = (e.target as HTMLElement).closest('.preview-block')?.querySelector('#history-output');
+            const output = (e.currentTarget as HTMLElement).closest('.preview-block')?.querySelector('#history-output');
             if (!output) return;
             
             if (type === 'hide history' || !output.classList.contains('hidden')) {
               output.classList.add('hidden');
-              e.currentTarget.textContent = 'Show History';
-              if ((window as any)._wissHistoryUnsub) {
-                (window as any)._wissHistoryUnsub();
-                (window as any)._wissHistoryUnsub = undefined;
-              }
+              e.currentTarget.textContent = i18nUi.history_show || 'Show History';
+              stopHistory();
               return;
             }
-            
+
             output.classList.remove('hidden');
-            e.currentTarget.textContent = 'Hide History';
-            
-            if ((window as any)._wissHistoryUnsub) (window as any)._wissHistoryUnsub();
-            (window as any)._wissHistoryUnsub = subscribeHistory((hist: any[]) => {
+            e.currentTarget.textContent = i18nUi.history_hide || 'Hide History';
+
+            stopHistory();
+            historyUnsub = subscribeHistory((hist: any[]) => {
               if (hist.length === 0) {
-                output.innerHTML = `<div class="text-sm text-zinc-500 text-center p-4 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl">Historial vacío / Empty history</div>`;
+                const empty = document.createElement('div');
+                empty.className = 'text-sm text-zinc-500 text-center p-4 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl';
+                empty.textContent = i18nUi.history_empty || 'Empty history';
+                output.replaceChildren(empty);
               } else {
-                output.innerHTML = hist.slice().reverse().map(t => 
-                  `<div class="p-3 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm bg-zinc-50 dark:bg-zinc-800/50 flex flex-col gap-1 text-left w-full overflow-hidden shrink-0">
-                     <div class="flex items-center justify-between">
-                       <span class="font-bold text-zinc-700 dark:text-zinc-300 capitalize text-xs">${t.type}</span>
-                       <span class="text-[10px] text-zinc-400">${new Date(t.createdAt).toLocaleTimeString()}</span>
-                     </div>
-                     <span class="text-zinc-600 dark:text-zinc-400 truncate text-xs">${typeof t.message === 'string' ? t.message : 'Custom Element'}</span>
-                   </div>`
-                ).join('');
+                // Build nodes instead of interpolating into innerHTML: toast
+                // messages come from the editable "Run" playground below, so
+                // a message like `<img src=x onerror=...>` used to execute
+                // when the history panel rendered it.
+                output.replaceChildren(...hist.slice().reverse().map(t => {
+                  const row = document.createElement('div');
+                  row.className = 'p-3 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm bg-zinc-50 dark:bg-zinc-800/50 flex flex-col gap-1 text-left w-full overflow-hidden shrink-0';
+
+                  const head = document.createElement('div');
+                  head.className = 'flex items-center justify-between';
+
+                  const type = document.createElement('span');
+                  type.className = 'font-bold text-zinc-700 dark:text-zinc-300 capitalize text-xs';
+                  type.textContent = t.type;
+
+                  const time = document.createElement('span');
+                  time.className = 'text-[10px] text-zinc-400';
+                  time.textContent = new Date(t.createdAt).toLocaleTimeString();
+
+                  const msg = document.createElement('span');
+                  msg.className = 'text-zinc-600 dark:text-zinc-400 truncate text-xs';
+                  msg.textContent = typeof t.message === 'string' ? t.message : 'Custom Element';
+
+                  head.append(type, time);
+                  row.append(head, msg);
+                  return row;
+                }));
               }
             });
             break;
           }
           case 'clear history': {
             toast.clearHistory();
-            toast.success('History cleared');
+            toast.success(i18nUi.history_cleared || 'History cleared');
             break;
           }
           case 'dark theme': toaster({ theme: 'dark' }); toast.success(i18n.theme_dark); updateHeroDot('dark'); break;
           case 'light theme': toaster({ theme: 'light' }); toast.success(i18n.theme_light); updateHeroDot('light'); break;
-          case 'glass theme': toaster({ theme: 'glass' }); toast.success(i18n.theme_glass); updateHeroDot('glass'); break;
           case 'neon theme': toaster({ theme: 'neon' }); toast.success(i18n.theme_neon); updateHeroDot('neon'); break;
           case 'pastel theme': toaster({ theme: 'pastel' }); toast.success(i18n.theme_pastel); updateHeroDot('pastel'); break;
           case 'brutal theme': toaster({ theme: 'brutal' }); toast.success(i18n.theme_brutal); updateHeroDot('brutal'); break;
@@ -438,14 +459,15 @@ const interactiveToasts = getTranslations(lang, 'interactive_toasts');
 
     document.querySelectorAll(".run-code-btn").forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const block = (e.target as HTMLElement).closest('.preview-block');
+        const block = (e.currentTarget as HTMLElement).closest('.preview-block');
         if (!block) return;
-        const codeEl = block.querySelector('[data-code-editor]');
-        if (!codeEl) return;
-        
-        let rawCode = codeEl.textContent || '';
-        rawCode = rawCode.replace(/import\s+.*?;?\n/g, '');
-        
+
+        // readCode() returns only the visible highlight variant. Reading the
+        // editor's textContent directly concatenated the light *and* dark
+        // copies, so every demo ran twice and fired two toasts.
+        const rawCode = readCode(block).replace(/import\s+.*?;?\n/g, '');
+        if (!rawCode.trim()) return;
+
         try {
           new Function('toast', 'toaster', rawCode)(toast, toaster);
         } catch(err) {

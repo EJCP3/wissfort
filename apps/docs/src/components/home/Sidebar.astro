@@ -124,5 +124,9 @@ const t = useTranslations(lang);
     }, observerOptions);
 
     sections.forEach(section => observer.observe(section));
+
+    // Without this, every navigation left a live observer holding the previous
+    // page's (now detached) section nodes.
+    document.addEventListener('astro:before-swap', () => observer.disconnect(), { once: true });
   });
 </script>

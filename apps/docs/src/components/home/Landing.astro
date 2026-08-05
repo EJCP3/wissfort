@@ -30,9 +30,20 @@ const { lang } = Astro.props;
 
   <script>
     import { toaster } from 'wissfort/vanilla';
-    
-    // Configuración inicial basada en localStorage
-    const isDark = document.documentElement.classList.contains('dark');
-    toaster({ format: 'wiss', position: 'top-center', theme: isDark ? 'dark' : 'light' });
+    import { docsToasterState } from '../../scripts/toaster-state';
+
+    // Runs on every navigation, not just the first load: with
+    // <ViewTransitions /> the <body> is replaced, so the toaster container
+    // goes with it. Re-applying the config here also keeps the format/theme
+    // chosen in the navbar from resetting when you switch language.
+    document.addEventListener('astro:page-load', () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      docsToasterState.theme = isDark ? 'dark' : 'light';
+      toaster({
+        format: docsToasterState.format,
+        position: 'top-center',
+        theme: docsToasterState.theme,
+      });
+    });
   </script>
 </Layout>

@@ -47,7 +47,6 @@
     "introduccion": {
       "title": "Introduction",
       "p1": "Headless and runtime-dependency-free toast notifications library. The core (wiss) is a pure TypeScript \"brain\" —state, queue, timers— that knows nothing about the DOM or any framework. The visual layer is interchangeable: by default it brings its own themes (light and dark) or you can choose to inherit the theme from your project via daisyUI or shadcn/ui to adapt to your current design."
-     
     },
     "instalacion": {
       "title": "Installation"
@@ -180,7 +179,6 @@
       "history_logged": "History printed to console. Open DevTools to view it.",
       "theme_dark": "Dark theme activated",
       "theme_light": "Light theme activated",
-      "theme_glass": "Glass theme activated",
       "theme_neon": "Neon theme activated",
       "theme_pastel": "Pastel theme activated",
       "theme_brutal": "Brutal theme activated",
@@ -192,7 +190,8 @@
       "behavior_normal": "Normal behavior activated (Stack)",
       "behavior_wiss": "Wiss behavior activated (Replace)",
       "syntax_error": "Syntax error in the code",
-      "prompt_copied": "Prompt for {fw} copied"
+      "prompt_copied": "Prompt for {fw} copied",
+      "copy_failed": "Could not copy to clipboard"
     },
     "sounds": {
       "chime": "Soft rising two-note chime (Default hover)",
@@ -211,5 +210,18 @@
       "ready": "Focused tick with harmonic rise (Content loaded)",
       "prefix": "Sound: {soundName}"
     }
+  },
+  "fab": {
+    "title": "AI Agent options"
+  },
+  "ui": {
+    "preview": "Preview",
+    "code": "Code",
+    "copy_code": "Copy code",
+    "run_code": "Run code",
+    "history_show": "Show History",
+    "history_hide": "Hide History",
+    "history_empty": "Empty history",
+    "history_cleared": "History cleared"
   }
 }

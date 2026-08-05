@@ -1,5 +1,6 @@
 import { getConfig } from '../core/config';
 import { sanitizeHtml } from '../core/sanitize';
+import { dismissToast } from '../core/timers';
 import type { Toast, ToastType } from '../core/types';
 import './island.css';
 
@@ -33,9 +34,32 @@ interface IslandState {
   rafId: number;
 }
 
-const instances = new WeakMap<HTMLButtonElement, IslandState>();
+const instances = new WeakMap<HTMLDivElement, IslandState>();
 
-function applyCSS(el: HTMLButtonElement, state: IslandState): void {
+/**
+ * Builds the action button. Clicking it runs the callback and, by default,
+ * closes the toast — otherwise "Undo" looks like a dead button until the
+ * duration runs out.
+ */
+function createActionButton(toast: Toast): HTMLButtonElement {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'island-action';
+  btn.dataset.cuelumePress = '';
+  btn.dataset.cuelumeRelease = '';
+  btn.dataset.cuelumeHover = 'tick';
+  btn.textContent = toast.action?.label ?? '';
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toast.action?.onClick();
+    if (toast.dismissOnAction ?? getConfig().dismissOnAction) {
+      dismissToast(toast.id);
+    }
+  });
+  return btn;
+}
+
+function applyCSS(el: HTMLDivElement, state: IslandState): void {
   // Stage 0: 40x40
   // Stage 1: titleWidth + 48, 40px
   // Stage 2: contentWidth + 48, contentHeight + 16
@@ -57,7 +81,7 @@ function applyCSS(el: HTMLButtonElement, state: IslandState): void {
   state.contentDiv.dataset.stage = String(state.stage);
 }
 
-function measure(el: HTMLButtonElement, state: IslandState): void {
+function measure(el: HTMLDivElement, state: IslandState): void {
   // To measure title only, we can use scrollWidth of titleDiv.
   const tw = state.titleDiv.scrollWidth;
   const cw = state.contentDiv.scrollWidth;
@@ -71,13 +95,13 @@ function measure(el: HTMLButtonElement, state: IslandState): void {
   }
 }
 
-function setStage(el: HTMLButtonElement, state: IslandState, newStage: 0 | 1 | 2): void {
+function setStage(el: HTMLDivElement, state: IslandState, newStage: 0 | 1 | 2): void {
   if (state.stage === newStage) return;
   state.stage = newStage;
   applyCSS(el, state);
 }
 
-function scheduleAutopilot(el: HTMLButtonElement, state: IslandState, duration: number): void {
+function scheduleAutopilot(el: HTMLDivElement, state: IslandState, duration: number): void {
   if (state.stageTimer) clearTimeout(state.stageTimer);
 
   // Animate to Stage 1, then Stage 2
@@ -97,13 +121,20 @@ function scheduleAutopilot(el: HTMLButtonElement, state: IslandState, duration: 
 export function renderIslandToast(toast: Toast): HTMLElement {
   const resolvedDuration = toast.duration ?? getConfig().duration;
 
-  const el = document.createElement('button');
+  // A <div>, not a <button>: the action button lives inside the toast, and
+  // <button> forbids interactive descendants — an HTML parser would hoist
+  // the action out as a *sibling*, which breaks SSR and any innerHTML pass.
+  const el = document.createElement('div');
   el.className = 'wiss-island';
   el.dataset.wissId = toast.id;
   el.dataset.state = toast.type;
   el.dataset.stage = '0';
-  el.setAttribute('role', toast.type === 'error' ? 'alert' : 'status');
-  el.setAttribute('aria-live', toast.type === 'error' ? 'assertive' : 'polite');
+  // The live region is #wiss-toaster (persistent, created before any toast
+  // exists) — see vanilla/index.ts. Only the politeness override rides on
+  // the toast itself, so screen readers interrupt for errors.
+  if (toast.type === 'error') {
+    el.setAttribute('aria-live', 'assertive');
+  }
   el.setAttribute('aria-atomic', 'true');
 
   const iconContainer = document.createElement('div');
@@ -156,16 +187,7 @@ export function renderIslandToast(toast: Toast): HTMLElement {
 
   let actionBtn = null;
   if (toast.action) {
-    actionBtn = document.createElement('button');
-    actionBtn.className = 'island-action';
-    actionBtn.dataset.cuelumePress = '';
-    actionBtn.dataset.cuelumeRelease = '';
-    actionBtn.dataset.cuelumeHover = 'tick';
-    actionBtn.textContent = toast.action.label;
-    actionBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toast.action?.onClick();
-    });
+    actionBtn = createActionButton(toast);
     contentDiv.append(actionBtn);
   }
 
@@ -221,8 +243,8 @@ export function renderIslandToast(toast: Toast): HTMLElement {
 }
 
 export function updateIslandToast(el: HTMLElement, toast: Toast): void {
-  const button = el as HTMLButtonElement;
-  const state = instances.get(button);
+  const root = el as HTMLDivElement;
+  const state = instances.get(root);
   if (!state) return;
 
   const changed = state.toastRef !== toast;
@@ -230,9 +252,16 @@ export function updateIslandToast(el: HTMLElement, toast: Toast): void {
   if (!changed) return;
 
   const resolvedDuration = toast.duration ?? getConfig().duration;
-  button.dataset.state = toast.type;
-  
-  const iconContainer = button.querySelector('.island-icon');
+  root.dataset.state = toast.type;
+  // A promise toast can turn into an error mid-flight — keep the politeness
+  // override in sync with the type.
+  if (toast.type === 'error') {
+    root.setAttribute('aria-live', 'assertive');
+  } else {
+    root.removeAttribute('aria-live');
+  }
+
+  const iconContainer = root.querySelector('.island-icon');
   if (iconContainer) {
     if (toast.icon) {
       if (typeof toast.icon === 'string') {
@@ -285,45 +314,56 @@ export function updateIslandToast(el: HTMLElement, toast: Toast): void {
     state.descDiv = null;
   }
 
-  if (toast.action && !state.actionBtn) {
-    state.actionBtn = document.createElement('button');
-    state.actionBtn.className = 'island-action';
-    state.actionBtn.dataset.cuelumePress = '';
-    state.actionBtn.dataset.cuelumeRelease = '';
-    state.actionBtn.dataset.cuelumeHover = 'tick';
-    state.actionBtn.textContent = toast.action.label;
-    state.actionBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toast.action?.onClick();
-    });
+  if (toast.action) {
+    // Rebuild rather than relabel: the click listener closes over the old
+    // toast, so reusing the node would keep calling the previous onClick.
+    state.actionBtn?.remove();
+    state.actionBtn = createActionButton(toast);
     state.contentDiv.append(state.actionBtn);
-  } else if (!toast.action && state.actionBtn) {
+  } else if (state.actionBtn) {
     state.actionBtn.remove();
     state.actionBtn = null;
-  } else if (state.actionBtn && toast.action) {
-    state.actionBtn.textContent = toast.action.label;
   }
 
   const showProgressBar = toast.progressBar ?? getConfig().progressBar;
-  let progressBar = button.querySelector('.wiss-progress-bar');
+  let progressBar = root.querySelector('.wiss-progress-bar');
   
   if (showProgressBar) {
     if (progressBar) progressBar.remove();
     const newBar = document.createElement('div');
     newBar.className = 'wiss-progress-bar';
     newBar.style.animationDuration = `${resolvedDuration}ms`;
-    button.append(newBar);
+    root.append(newBar);
   } else if (progressBar) {
     progressBar.remove();
   }
 
-  measure(button, state);
-  scheduleAutopilot(button, state, resolvedDuration);
+  measure(root, state);
+  scheduleAutopilot(root, state, resolvedDuration);
+}
+
+/**
+ * Releases everything this toast holds outside its own subtree: the stage
+ * timer, the queued rAF and the ResizeObserver. Must run before the node is
+ * detached — otherwise the observer keeps it alive and the autopilot timer
+ * fires against a node nobody can see.
+ */
+export function disposeIslandToast(el: HTMLElement): void {
+  const state = instances.get(el as HTMLDivElement);
+  if (!state) return;
+
+  if (state.stageTimer) {
+    clearTimeout(state.stageTimer);
+    state.stageTimer = null;
+  }
+  cancelAnimationFrame(state.rafId);
+  state.contentRO?.disconnect();
+  state.contentRO = null;
 }
 
 export function closeIslandToast(el: HTMLElement, onComplete: () => void): void {
-  const button = el as HTMLButtonElement;
-  const state = instances.get(button);
+  const root = el as HTMLDivElement;
+  const state = instances.get(root);
   if (!state) {
     onComplete();
     return;
@@ -332,13 +372,13 @@ export function closeIslandToast(el: HTMLElement, onComplete: () => void): void 
   if (state.stageTimer) clearTimeout(state.stageTimer);
   
   if (state.stage === 2) {
-    setStage(button, state, 1);
+    setStage(root, state, 1);
     setTimeout(() => {
-      setStage(button, state, 0);
+      setStage(root, state, 0);
       setTimeout(onComplete, 400); // Wait 400ms for width transition to finish
     }, 400); // 400ms for height
   } else if (state.stage === 1) {
-    setStage(button, state, 0);
+    setStage(root, state, 0);
     setTimeout(onComplete, 400); // Wait 400ms for width transition to finish
   } else {
     onComplete();

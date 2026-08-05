@@ -104,7 +104,9 @@
   transform-origin: left;
   animation: wiss-progress linear forwards;
 }
-[data-wiss-toaster]:hover .wiss-progress-bar {
+/* Set by wirePauseListeners() alongside pauseAll()/resumeAll(), so the bar
+   freezes for keyboard focus too — not just for the mouse. */
+[data-wiss-toaster][data-wiss-paused="true"] .wiss-progress-bar {
   animation-play-state: paused;
 }
 @keyframes wiss-progress {
@@ -129,6 +131,7 @@
   z-index: 0;
   pointer-events: none;
 }
+
 /* Themes moved to island.css */
 
 [data-wiss-svg] {
@@ -294,7 +297,12 @@
 
 [data-wiss-action] {
   all: unset;
-  display: inline-block;
+  /* inline-flex + min-height so the hit area can grow past the text box
+     without the label drifting off-centre. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
   margin-top: 12px;
   padding: 6px 14px;
   background-color: var(--wiss-action-bg, rgba(255, 255, 255, 0.1));
@@ -304,6 +312,13 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 150ms ease;
+}
+/* Touch input: 44px is the recommended minimum target size. */
+@media (pointer: coarse) {
+  [data-wiss-action] {
+    min-height: 44px;
+    padding: 10px 18px;
+  }
 }
 [data-wiss-action]:hover {
   background-color: var(--wiss-action-hover-bg, rgba(255, 255, 255, 0.2));
@@ -322,24 +337,49 @@
 }
 
 /* --- Accessibility (a11y) --- */
+/*
+ * Careful here: not every transform in this file is decoration.
+ *   [data-wiss-header] translateX(--_px)  → aligns the text with the pill
+ *   [data-wiss-pill]   scaleY(--_sy)      → squashes the 67px shape to 40px
+ * Blanket `transform: none` on those detaches the label from its background
+ * on any right/center position and leaves the pill overflowing its own
+ * clip box. So we cut the *motion* (durations) and only zero the transforms
+ * that are purely ornamental.
+ */
 @media (prefers-reduced-motion: reduce) {
-  [data-wiss-toast], 
-  [data-wiss-pill], 
-  [data-wiss-body], 
-  [data-wiss-header], 
-  [data-wiss-header-inner], 
+  [data-wiss-toast],
+  [data-wiss-pill],
+  [data-wiss-body],
+  [data-wiss-header],
+  [data-wiss-header-inner],
   [data-wiss-content] {
-    transition: opacity 0.3s ease !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  /* --_ht is a 3px lift + 0.9 scale — ornamental, safe to drop. */
+  [data-wiss-header-inner] {
     transform: none !important;
   }
-  
+
   [data-wiss-toast] {
     filter: none !important;
   }
-  
+
+  [data-wiss-toast][data-ready="false"],
+  [data-wiss-toast][data-exiting="true"] {
+    transform: none !important;
+  }
+
+  /* The loading spinner is an essential status cue, so it stays — but at a
+     speed that isn't an infinite fast spin. */
+  .wiss-spinner {
+    animation-duration: 3s !important;
+  }
+
   .wiss-progress-wrapper,
   .wiss-progress-bar {
     animation: none !important;
-    transition: width linear !important;
+    transition: none !important;
   }
 }

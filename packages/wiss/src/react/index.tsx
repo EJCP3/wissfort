@@ -58,4 +58,4 @@ export function useToastHistory(): import('../core/types').Toast[] {
   return history;
 }
 
-export type { WissConfig } from '../core/types';
+export type { Position, Theme, WissConfig } from '../core/types';

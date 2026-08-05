@@ -1,6 +1,6 @@
 import { getConfig, setConfig } from './config';
-import { addToast, clearToasts, removeToast, getHistory, clearHistory, subscribeHistory } from './store';
-import { cancelDismiss, scheduleDismiss } from './timers';
+import { addToast, clearToasts, getHistory, getToast, clearHistory, subscribeHistory } from './store';
+import { dismissToast, scheduleDismiss } from './timers';
 import type { PromiseToastOptions, ToastOptions, ToastType, WissConfig, Toast } from './types';
 
 function resolveDuration(options?: ToastOptions): number {
@@ -33,8 +33,19 @@ export const toast = {
     return createToast('loading', message, options);
   },
   update(id: string, options: Partial<ToastOptions> & { message?: string | HTMLElement, type?: ToastType }): string {
-    const type = options.type ?? 'info';
-    return createToast(type, options.message ?? '', { ...options, id });
+    // Merge onto the live toast. Defaulting to 'info' with an empty message
+    // meant `toast.update(id, { description })` silently wiped the type, the
+    // message and the remaining duration.
+    const current = getToast(id);
+    const type = options.type ?? current?.type ?? 'info';
+    const message = options.message ?? current?.message ?? '';
+
+    const merged: ToastOptions = { ...current, ...options, id };
+    // `current` is a Toast, so it carries keys ToastOptions doesn't own.
+    delete (merged as Partial<Toast>).type;
+    delete (merged as Partial<Toast>).message;
+
+    return createToast(type, message, merged);
   },
   promise<T>(
     promise: Promise<T>,
@@ -59,8 +70,7 @@ export const toast = {
     return id;
   },
   dismiss(id: string): void {
-    cancelDismiss(id);
-    removeToast(id);
+    dismissToast(id);
   },
   clear(): void {
     clearToasts();
@@ -79,4 +89,13 @@ export function initWiss(config?: WissConfig): void {
   setConfig(config ?? {});
 }
 
-export type { Listener, Position, Toast, ToastOptions, ToastType, WissConfig } from './types';
+export type {
+  Listener,
+  Position,
+  Theme,
+  Toast,
+  ToastAction,
+  ToastOptions,
+  ToastType,
+  WissConfig,
+} from './types';

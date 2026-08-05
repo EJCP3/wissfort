@@ -1,4 +1,4 @@
-import { toaster as vanillaToaster } from '../vanilla';
+import { toaster as vanillaToaster, destroyToaster } from '../vanilla';
 import { subscribeHistory } from '../core';
 import type { Position, WissConfig, Toast } from '../core/types';
 import { readable } from 'svelte/store';
@@ -40,8 +40,10 @@ export function toaster(config?: WissConfig): void {
   vanillaToaster(config);
 }
 
+export { destroyToaster };
+
 export const toastHistory = readable<Toast[]>([], (set) => {
   return subscribeHistory(set);
 });
 
-export type { WissConfig, Position } from '../core/types';
+export type { WissConfig, Position, Theme } from '../core/types';
